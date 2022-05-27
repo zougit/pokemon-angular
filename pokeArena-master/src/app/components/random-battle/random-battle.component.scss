@@ -1,0 +1,52 @@
+
+.logPlayer1{
+  color: #7777FF;
+}
+
+.logPlayer2{
+  color: greenyellow;
+}
+
+.logWinner{
+  color: goldenrod;
+}
+
+.logLoser{
+  color: tomato;
+}
+
+.logBox{
+  z-index: 10;
+  position: relative;
+  bottom: 357px;
+  left: 600px;
+  background-color: #3D3D3D;
+  width: 350px;
+  height: 357px;
+
+  border: solid 5px black;
+  border-radius: 0px 10px 10px 0px;
+
+  overflow-y: scroll;
+}
+
+.logBox::-webkit-scrollbar {
+  width: 5px; /* width of the entire scrollbar */
+}
+
+.logBox::-webkit-scrollbar-track {
+  background: none; /* color of the tracking area */
+}
+
+.logBox::-webkit-scrollbar-thumb {
+  background-color: gray; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid gray; /* creates padding around scroll thumb */
+}
+
+.logText{
+  font-size: 12px;
+  margin: 0px 5px;
+  margin-bottom: -4px;
+  font-weight: bold;
+}
