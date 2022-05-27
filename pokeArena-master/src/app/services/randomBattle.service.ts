@@ -63,7 +63,7 @@ export class RandomBattleService{
             log += "\n NOT VERY EFFECTIVE";
           }
           //@ts-ignore
-          if (this.typesService.multi[atk-1][def-1] === 2) {
+          if (this.typesService.multi[atk-1][def-1] === 0) {
             log += "\n NO EFFECT";
           }
 
