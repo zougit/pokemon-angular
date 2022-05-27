@@ -76,7 +76,8 @@ export class PokemonBuilder{
                 name: moveApi.name,
                 accuracy: moveApi.accuracy,
                 power: moveApi.power,
-                pp: moveApi.pp
+                pp: moveApi.pp,
+                type: moveApi.type.name
             });
         }
     }

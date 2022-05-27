@@ -9,6 +9,7 @@ export interface PokemonProps{
     spAtk: number;
     spDef: number;
     speed: number;
+    type: string;
     moves: Move[];
     id: number;
 
@@ -24,6 +25,7 @@ export class Pokemon implements PokemonProps{
     spAtk: number;
     spDef: number;
     speed: number;
+    type: string;
     moves: Move[];
     id: number;
 
@@ -37,6 +39,7 @@ export class Pokemon implements PokemonProps{
         this.spAtk = pokemon.spAtk;
         this.spDef = pokemon.spDef;
         this.speed = pokemon.speed;
+        this.type = pokemon.type;
         this.id = pokemon.id;
 
         this.moves = pokemon.moves;

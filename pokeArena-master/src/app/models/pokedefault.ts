@@ -10,6 +10,7 @@ const pokemonDefault = new Pokemon ({
     spAtk: 0,
     spDef: 0,
     speed: 0,
+    type: "normal",
     id: 0,
 
     moves: []

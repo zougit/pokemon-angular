@@ -4,8 +4,9 @@ import { map } from 'rxjs/operators';
 import { BattleInfoProps, LogProps } from '../models/battleLog.model';
 import { Move } from '../models/move.model';
 import { Player } from '../models/player.model';
-import { Pokemon, PokemonProps } from '../models/Pokemon.model';
+import { Pokemon } from '../models/Pokemon.model';
 import { PokemonService } from './pokemon.service';
+import { Itype, TypesService } from './tabTypes.service'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class RandomBattleService{
   pokemons = new Array<Pokemon>(2);
   public toggler = false
 
-  constructor(private pokemonService: PokemonService) { }
+  constructor(private pokemonService: PokemonService, private typesService: TypesService) { }
 
   addPlayers(names: string[]): void{
     RandomBattleService.player[0] = names[0];
@@ -50,6 +51,21 @@ export class RandomBattleService{
 
           log = this.pokemons[attacker].name + ' attack ' + this.pokemons[defender].name
                 + ' with ' + move.name + '. ' + this.pokemons[defender].name + ' lose ' + damage + 'hp.';
+          
+          let def = Itype.get(this.pokemons[defender].type) === undefined ? 0 : Itype.get(this.pokemons[defender].type)
+          let atk = Itype.get(move.type) === undefined ? 0 : Itype.get(move.type)
+          //@ts-ignore
+          if (this.typesService.multi[atk-1][def-1] === 2) {
+            log += "\n THAT'S SUPER EFFECTIVE";
+          }
+          //@ts-ignore
+          if (this.typesService.multi[atk-1][def-1] === 0.5) {
+            log += "\n NOT VERY EFFECTIVE";
+          }
+          //@ts-ignore
+          if (this.typesService.multi[atk-1][def-1] === 2) {
+            log += "\n NO EFFECT";
+          }
 
           attacker = attacker === 1 ? 0 : 1;
           defender = defender === 0 ? 1 : 0;
@@ -87,11 +103,18 @@ export class RandomBattleService{
 
   calculDamage(attacker: number, defender: number, move: Move): number{
     let damage = 0;
-
+    
+    let def = Itype.get(this.pokemons[defender].type) === undefined ? 0 : Itype.get(this.pokemons[defender].type)
+    let atk = Itype.get(move.type) === undefined ? 0 : Itype.get(move.type)
+    //@ts-ignore
+    console.log("multi =",this.typesService.multi[atk-1][def-1]) 
     if (move.power !== null){
-        damage = Math.floor(move.power * 0.005 * this.pokemons[attacker].atk * 0.01 * this.pokemons[defender].def);
+        //@ts-ignore
+        damage = Math.floor((move.power * 0.005 * this.pokemons[attacker].atk * 0.01 * this.pokemons[defender].def)*this.typesService.multi[atk-1][def-1]);
         damage = damage < 0 ? 0 : damage;
+        console.log("dmg =",damage);
     }
+
 
     this.pokemons[defender].hp -= damage;
 

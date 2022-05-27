@@ -19,7 +19,8 @@ export class MoveBuilder{
             name: move.name,
             accuracy: move.accuracy,
             power: move.power,
-            pp: move.pp
+            pp: move.pp,
+            type: move.type.name
         })
 
 
