@@ -1,9 +1,8 @@
-import { Injectable, OnInit } from '@angular/core';
-import { forkJoin, Observable, Subscriber, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { BattleInfoProps, LogProps } from '../models/battleLog.model';
+import { Injectable } from '@angular/core';
+import { forkJoin, interval, Observable } from 'rxjs';
+import { filter, map, takeWhile } from 'rxjs/operators';
+import { BattleInfoProps } from '../models/battleLog.model';
 import { Move } from '../models/move.model';
-import { Player } from '../models/player.model';
 import { Pokemon } from '../models/Pokemon.model';
 import { PokemonService } from './pokemon.service';
 import { Itype, TypesService } from './tabTypes.service'
@@ -26,7 +25,8 @@ export class RandomBattleService{
   addPokemons(pokemons: Array<number>): Observable<Pokemon[]>{
     return forkJoin(pokemons.map((pokemon: number): Observable<Pokemon> => {
       return this.pokemonService.getPokemonById(pokemon);
-    })).pipe(map((poke: Pokemon[]): Pokemon[] => {
+    }))
+    .pipe(map((poke: Pokemon[]): Pokemon[] => {
         poke.forEach((pokemon: Pokemon, index: number): void => {
           this.pokemons[index] = new Pokemon(pokemon);
         });
@@ -35,12 +35,14 @@ export class RandomBattleService{
   }
 
   battle(): Observable<BattleInfoProps>{
-    console.log(RandomBattleService.player);
     let attacker = this.whoIsMoreSpeed();
     let defender = attacker === 1 ? 0 : 1;
-    return new Observable<BattleInfoProps>(subscriber => {
-      const fight = timer(0, 1000).subscribe(response => {
-        if (this.toggler === true) {
+    let isover = false
+    const fight = interval(1000)
+    return fight.pipe(
+      filter(() => this.toggler === true),
+      takeWhile(()=> isover === false),
+      map(():BattleInfoProps => {
           let log = '';
           const move = this.pokemons[attacker].choseRandomMove();
           const damage = this.calculDamage(
@@ -52,38 +54,38 @@ export class RandomBattleService{
           log = this.pokemons[attacker].name + ' attack ' + this.pokemons[defender].name
                 + ' with ' + move.name + '. ' + this.pokemons[defender].name + ' lose ' + damage + 'hp.';
           
-          let def = Itype.get(this.pokemons[defender].type) === undefined ? 0 : Itype.get(this.pokemons[defender].type)
-          let atk = Itype.get(move.type) === undefined ? 0 : Itype.get(move.type)
-          //@ts-ignore
+          let def = Itype.get(this.pokemons[defender].type) ?? 0
+          let atk = Itype.get(move.type) ?? 0
+          
           if (this.typesService.multi[atk-1][def-1] === 2) {
             log += "\n THAT'S SUPER EFFECTIVE";
           }
-          //@ts-ignore
+
           if (this.typesService.multi[atk-1][def-1] === 0.5) {
             log += "\n NOT VERY EFFECTIVE";
           }
-          //@ts-ignore
+
           if (this.typesService.multi[atk-1][def-1] === 0) {
             log += "\n NO EFFECT";
           }
 
           attacker = attacker === 1 ? 0 : 1;
           defender = defender === 0 ? 1 : 0;
-          subscriber.next({pokemons: this.pokemons, log: {text: log, color: this.pokemons[attacker] === this.pokemons[0] ? 0 : 1}});
-
-          const winner = this.whoWin();
+          return {pokemons: this.pokemons, log: {text: log, color: this.pokemons[attacker] === this.pokemons[0] ? 0 : 1}};       
         
-          if (winner !== -1){
-            const loser = winner === 0 ? 1 : 0;
-
-            log = this.pokemons[loser].name + ' is KO.';
-            subscriber.next({pokemons: this.pokemons, log: {text: log, color: 2, winner}});
-            fight.unsubscribe();
-          }
-        
+      }),
+      map((battleLog: BattleInfoProps): BattleInfoProps => {
+        const winner = this.whoWin();
+      
+        if (winner !== -1){
+          const loser = winner === 0 ? 1 : 0;
+          let log = this.pokemons[loser].name + ' is KO.';
+          isover = true
+          return {pokemons: this.pokemons, log: {text: log, color: 2, winner}};
         }
-        });
-    });
+        return battleLog
+      })
+    )
   }
 
   whoWin(): number{
@@ -104,17 +106,12 @@ export class RandomBattleService{
   calculDamage(attacker: number, defender: number, move: Move): number{
     let damage = 0;
     
-    let def = Itype.get(this.pokemons[defender].type) === undefined ? 0 : Itype.get(this.pokemons[defender].type)
-    let atk = Itype.get(move.type) === undefined ? 0 : Itype.get(move.type)
-    //@ts-ignore
-    console.log("multi =",this.typesService.multi[atk-1][def-1]) 
+    let atk = Itype.get(move.type) ?? 0
+    let def = Itype.get(this.pokemons[defender].type) ?? 0
     if (move.power !== null){
-        //@ts-ignore
         damage = Math.floor((move.power * 0.005 * this.pokemons[attacker].atk * 0.01 * this.pokemons[defender].def)*this.typesService.multi[atk-1][def-1]);
         damage = damage < 0 ? 0 : damage;
-        console.log("dmg =",damage);
     }
-
 
     this.pokemons[defender].hp -= damage;
 

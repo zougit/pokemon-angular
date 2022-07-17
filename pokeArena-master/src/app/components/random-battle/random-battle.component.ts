@@ -24,7 +24,6 @@ export class RandomBattleComponent implements OnInit {
   ngOnInit(): void {
     this.players = RandomBattleService.player;
 
-
     if (this.players[0] === undefined || this.players[1] === undefined){
       this.players = ['Player 1', 'Player 2'];
     }

@@ -13,7 +13,7 @@ export class PokeChoiceComponent implements OnInit {
   pokeCards: Array<PokeCardProps> = [];
   pokemonPlayer: Array<Array<number>> = new Array<Array<number>>(2);
 
-  constructor(private pokeService: PokemonService, private route: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private pokeService: PokemonService, private route: Router) { }
 
   ngOnInit(): void {
     for (let i = 0; i < this.pokemonPlayer.length; i++){
