@@ -11,17 +11,13 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 export class PokeChoiceComponent implements OnInit {
 
   pokeCards: Array<PokeCardProps> = [];
-  pokemonPlayer: Array<Array<number>> = new Array<Array<number>>(2);
+  pokemonPlayer: Array<number> = new Array<number>(2);
 
   constructor(private pokeService: PokemonService, private route: Router) { }
 
   ngOnInit(): void {
-    for (let i = 0; i < this.pokemonPlayer.length; i++){
-      this.pokemonPlayer[i] = new Array<number>(1);
-    }
-    this.pokemonPlayer[0][0] = 0;
-    this.pokemonPlayer[1][0] = 0;
-
+    this.pokemonPlayer[0] = 0;
+    this.pokemonPlayer[1] = 0;
 
     this.pokeService.getAll().subscribe( response => {
       this.pokeCards = response;
@@ -29,11 +25,11 @@ export class PokeChoiceComponent implements OnInit {
   }
 
   selectPoke(player: number, index: number): void {
-    this.pokemonPlayer[player][0] = index;
+    this.pokemonPlayer[player] = index;
   }
 
   fight(): void {
-    if (this.pokemonPlayer[0][0] !== 0 && this.pokemonPlayer[1][0] !== 0){
+    if (this.pokemonPlayer[0] !== 0 && this.pokemonPlayer[1] !== 0){
       this.route.navigate(['randomBattle'],
         {
           queryParams: {
