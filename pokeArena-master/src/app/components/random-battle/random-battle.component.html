@@ -1,6 +1,6 @@
 <div class="">
 
-  <button class="menuButton" (click)="toggle()" >
+  <button class="playpause" (click)="toggle()">
     <img *ngIf="toggler === false" width="50px" src="./assets/button-play-pokemon.png" alt="">
     <img *ngIf="toggler === true" width="50px" src="./assets/button-pause-pokemon.png" alt="">
   </button>
@@ -13,16 +13,17 @@
   <div class="logBox">
     <div class="d-flex flex-column">
       <div *ngFor="let log of logs; let i = index">
-        <p *ngIf="log.winner === undefined" class="logText" [ngClass]="log.color === 0 ? 'logPlayer1': 'logPlayer2'">[{{currentTime[i] | date:'HH:mm:ss'}}] : {{log.text | titlecase}}</p>
+        <p *ngIf="log.winner === undefined" class="logText" [ngClass]="log.color === 0 ? 'logPlayer1': 'logPlayer2'">
+          [{{currentTime[i] | date:'HH:mm:ss'}}] : {{log.text | titlecase}}</p>
         <p *ngIf="log.winner !== undefined" class="logText logLoser">{{log.text | titlecase}}</p>
         <p *ngIf="log.winner !== undefined" class="logText logWinner">{{players[log.winner] | titlecase}} win the battle.</p>
       </div>
     </div>
   </div>
 
+
+  <button class="backButton menuButton" (click)="lastPage()">
+    <img width="25px" src="./assets/backArrow.svg" alt="">
+  </button>
+
 </div>
-
-<button class="backButton menuButton" (click)="lastPage()">
-  <img width="25px" src="./assets/backArrow.svg" alt="">
-</button>
-

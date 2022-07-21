@@ -4,7 +4,13 @@ body{
   display: flex;
   justify-content: center;
   font-family: sans-serif;
-  background-color: lightblue;
+  background-image: url('./assets/Pokemon-forest-by-BlazingIfrit-Fur-Affinity-dot-net.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-y: hidden;
+  //max-height: 721px;
 }
 
 .hpCard{
@@ -20,8 +26,6 @@ body{
   font-weight: bold;
   margin-bottom: 0px;
 }
-
-
 
 .hpLabel{
   font-size: 10px;
@@ -53,7 +57,7 @@ body{
 
 .backButton{
   position: fixed;
-  bottom: 60px;
+  bottom: 10px;
 
   left: 50%;
   margin-right: -50%;
