@@ -9,8 +9,9 @@ describe('PokemonService', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PokemonService ]
-    })
+    declarations: [PokemonService],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   });
 

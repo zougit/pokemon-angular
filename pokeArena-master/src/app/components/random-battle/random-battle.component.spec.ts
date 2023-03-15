@@ -8,8 +8,9 @@ describe('RandomBattleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RandomBattleComponent ]
-    })
+    declarations: [RandomBattleComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   });
 

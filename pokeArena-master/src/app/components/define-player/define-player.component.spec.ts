@@ -8,8 +8,9 @@ describe('DefinePlayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DefinePlayerComponent ]
-    })
+    declarations: [DefinePlayerComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   });
 

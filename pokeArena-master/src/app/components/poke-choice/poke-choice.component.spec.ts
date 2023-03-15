@@ -11,9 +11,10 @@ describe('PokeChoiceComponent', () => {
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
-      declarations: [ PokeChoiceComponent ],
-      providers: [ { provide: PokemonService, useValue: pokeServiceStub } ],
-    })
+    declarations: [PokeChoiceComponent],
+    providers: [{ provide: PokemonService, useValue: pokeServiceStub }],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PokeChoiceComponent);
