@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RandomBattleService } from 'src/app/services/randomBattle.service';
 
@@ -10,9 +10,9 @@ import { RandomBattleService } from 'src/app/services/randomBattle.service';
 })
 export class DefinePlayerComponent implements OnInit {
 
-  playerForm = new FormGroup({
-    p1: new FormControl(''),
-    p2: new FormControl('')
+  playerForm = new UntypedFormGroup({
+    p1: new UntypedFormControl(''),
+    p2: new UntypedFormControl('')
   });
 
   constructor(private battleService: RandomBattleService, private router: Router) { }
