@@ -13,6 +13,8 @@ import { HomeComponent } from './components/home/home.component';
 import { RandomBattleComponent } from './components/random-battle/random-battle.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PokeChoiceComponent } from './components/poke-choice/poke-choice.component';
+import { AuthComponent } from './components/auth/auth.component';
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { PokeChoiceComponent } from './components/poke-choice/poke-choice.compon
     RandomBattleComponent,
     DefinePlayerComponent,
     HomeComponent,
-    PokeChoiceComponent
+    PokeChoiceComponent,
+    AuthComponent,
+    MenuComponent
   ],
   imports: [
     ReactiveFormsModule,

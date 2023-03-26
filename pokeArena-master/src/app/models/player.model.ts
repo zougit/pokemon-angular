@@ -2,7 +2,6 @@ import { Pokemon } from './Pokemon.model';
 
 export interface PlayerProps{
     name: string;
-
     pokemon: Pokemon[];
 }
 
