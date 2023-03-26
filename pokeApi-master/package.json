@@ -12,7 +12,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "pokeapi-typescript": "^2.1.0"
+    "pokeapi-typescript": "^2.1.0",
+    "sequelize": "^6.29.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",

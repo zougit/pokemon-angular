@@ -1,5 +1,5 @@
 import {Pokemon} from ".."
-import PokeAPI, { IMove, IPokemon } from "pokeapi-typescript";
+import PokeAPI, { IMove, IPokemon, IPokemonSpecies } from "pokeapi-typescript";
 import { Move } from "../move";
 export class PokemonBuilder{
 
@@ -13,9 +13,15 @@ export class PokemonBuilder{
         return PokemonBuilder.instance;
     }
 
-    public async create(name: string): Promise<Pokemon | null> {
+    public async create(name: string | number): Promise<Pokemon | null> {
         try {
             const pokemonApi = await PokeAPI.Pokemon.resolve(name);
+            const pokeSpeciesApi = await PokeAPI.PokemonSpecies.resolve(name);
+
+            const idEvoChain = pokeSpeciesApi.evolution_chain.url.split('/') ;
+            let evo = await this.evolution(Number(idEvoChain[6]),pokeSpeciesApi);
+            if (pokemonApi.name == evo) evo = "";
+            
             const pokemon = new Pokemon({
                 name: pokemonApi.name,
                 hp: pokemonApi.stats[0].base_stat,
@@ -26,7 +32,9 @@ export class PokemonBuilder{
                 spDef: pokemonApi.stats[4].base_stat,
                 speed: pokemonApi.stats[5].base_stat,
                 type: pokemonApi.types[0].type.name ,
-                id: pokemonApi.id
+                id: pokemonApi.id,
+                nameFR : pokeSpeciesApi.names[4].name,
+                evolution : evo
             });
 
             await this.setMoveRandom(pokemon, pokemonApi)
@@ -38,29 +46,41 @@ export class PokemonBuilder{
         }
     }
 
-    public async createById(id: number): Promise<Pokemon | null> {
-        try {
-            const pokemonApi = await PokeAPI.Pokemon.resolve(id);
-            const pokemon = new Pokemon({
-                name: pokemonApi.name,
-                hp: pokemonApi.stats[0].base_stat,
-                hpMax: pokemonApi.stats[0].base_stat,
-                atk: pokemonApi.stats[1].base_stat,
-                def: pokemonApi.stats[2].base_stat,
-                spAtk: pokemonApi.stats[3].base_stat,
-                spDef: pokemonApi.stats[4].base_stat,
-                speed: pokemonApi.stats[5].base_stat,
-                type: pokemonApi.types[0].type.name ,
-                id: pokemonApi.id
-            });
+    // public async createById(id: number): Promise<Pokemon | null> {
+    //     try {
+    //         const pokemonApi = await PokeAPI.Pokemon.resolve(id);
+    //         const pokemon = new Pokemon({
+    //             name: pokemonApi.name,
+    //             hp: pokemonApi.stats[0].base_stat,
+    //             hpMax: pokemonApi.stats[0].base_stat,
+    //             atk: pokemonApi.stats[1].base_stat,
+    //             def: pokemonApi.stats[2].base_stat,
+    //             spAtk: pokemonApi.stats[3].base_stat,
+    //             spDef: pokemonApi.stats[4].base_stat,
+    //             speed: pokemonApi.stats[5].base_stat,
+    //             type: pokemonApi.types[0].type.name ,
+    //             id: pokemonApi.id
+    //         });
 
-            await this.setMoveRandom(pokemon, pokemonApi)
+    //         await this.setMoveRandom(pokemon, pokemonApi)
 
-            return pokemon;
+    //         return pokemon;
+    //     }
+    //     catch{
+    //         return null;
+    //     }
+    // }
+
+    public async evolution(id :number, pokeSpecies : IPokemonSpecies) {
+        const evolution_chain = await PokeAPI.EvolutionChain.resolve(id);
+        let evolution;
+        if (pokeSpecies.evolves_from_species != null) {
+             evolution = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
+        }else {
+             evolution = evolution_chain.chain.evolves_to[0].species.name;
         }
-        catch{
-            return null;
-        }
+        
+        return evolution;
     }
 
     public async setMoveRandom(pokemon: Pokemon, pokemonApi: IPokemon): Promise<void>{

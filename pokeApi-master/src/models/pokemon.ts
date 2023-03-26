@@ -12,6 +12,8 @@ export interface PokemonProps{
     type: string;
     moves?: Move[];
     id: number;
+    nameFR: string;
+    evolution: string | null; 
 }
 
 
@@ -27,6 +29,8 @@ export class Pokemon implements PokemonProps{
     type: string;
     moves: Move[] = [];
     id: number;
+    nameFR: string;
+    evolution: string | null; 
 
     constructor(pokemon: PokemonProps){
         this.name = pokemon.name;
@@ -39,6 +43,8 @@ export class Pokemon implements PokemonProps{
         this.speed = pokemon.speed;
         this.type = pokemon.type;
         this.id = pokemon.id;
+        this.nameFR = pokemon.nameFR;
+        this.evolution = pokemon.evolution;
     };
 
     isDead(): Boolean {

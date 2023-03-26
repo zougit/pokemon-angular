@@ -6,7 +6,6 @@ import express from "express";
 import { buildRoutes } from "./routes";
 let cors = require('cors');
 
-
 // async function main(){
 //     // const eevee = await PokeAPI.Pokemon.resolve("eevee");
 // //    console.log(eevee.sprites);
