@@ -1,6 +1,6 @@
 import express from "express";
 import { PokemonBuilder } from "../models/builder";
-import { PokeCardService } from "../service/pokeCard.services";
+import { PokeCardService } from "../services/pokeCard.services";
 
 const pokeRouter = express.Router();
 
