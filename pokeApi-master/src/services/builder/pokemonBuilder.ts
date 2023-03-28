@@ -1,6 +1,6 @@
-import {Pokemon} from ".."
+import {Pokemon} from "../../models"
 import PokeAPI, { IMove, IPokemon, IPokemonSpecies } from "pokeapi-typescript";
-import { Move } from "../move";
+import { Move } from "../../models";
 export class PokemonBuilder{
 
     private static instance: PokemonBuilder;

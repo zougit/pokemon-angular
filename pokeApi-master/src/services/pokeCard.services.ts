@@ -1,5 +1,5 @@
 import PokeAPI, { IPokemon } from "pokeapi-typescript";
-import { PokeCardProps } from "../models/pokeCard";
+import { PokeCardProps } from "../models";
 export class PokeCardService{
 
     private static instance: PokeCardService;

@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 import { Pokemon } from "../models";
-import { Move } from "../models/move";
+import { Move } from "../models";
 
 
 

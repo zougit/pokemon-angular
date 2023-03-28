@@ -5,6 +5,8 @@
 import express from "express";
 import { buildRoutes } from "./routes";
 import connection from "./config/config";
+import dotenv from 'dotenv';
+dotenv.config();
 let cors = require("cors");
 
 

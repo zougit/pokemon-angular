@@ -21,7 +21,6 @@ export class User extends Model<User> {
   @Column(INTEGER)
   id!: number;
 
-  //TODO - unique username
   @AllowNull(false)
   @NotEmpty
   @Unique
