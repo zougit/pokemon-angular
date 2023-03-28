@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import { Todos } from "../models/todo";
-import { User } from "../models";
+import { Pokedb, User } from "../models";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -11,7 +11,7 @@ const connection = new Sequelize({
   password:  process.env.PWDB,
   database: process.env.DB,
   logging: false,
-  models: [Todos,User],
+  models: [Todos,User,Pokedb],
 });
 
 export default connection;

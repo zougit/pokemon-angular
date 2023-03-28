@@ -8,7 +8,8 @@ import {
   AutoIncrement,
   NotEmpty,
   PrimaryKey,
-  Unique
+  Unique,
+  Default,
 } from "sequelize-typescript";
 
 @Table({
@@ -31,4 +32,14 @@ export class User extends Model<User> {
   @NotEmpty
   @Column(STRING)
   password!: string;
+  
+  // @AllowNull(false)
+  // @NotEmpty
+  // @Column(STRING)
+  // role!: string;
+
+  @AllowNull(true)
+  @Default(0)
+  @Column(INTEGER)
+  money?: number;
 }
