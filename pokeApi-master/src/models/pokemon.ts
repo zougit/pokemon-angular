@@ -14,6 +14,7 @@ export interface PokemonProps{
     id: number;
     nameFR: string;
     evolution: string | null; 
+    is_legendary: boolean;
 }
 
 
@@ -31,6 +32,7 @@ export class Pokemon implements PokemonProps{
     id: number;
     nameFR: string;
     evolution: string | null; 
+    is_legendary: boolean;
 
     constructor(pokemon: PokemonProps){
         this.name = pokemon.name;
@@ -45,6 +47,7 @@ export class Pokemon implements PokemonProps{
         this.id = pokemon.id;
         this.nameFR = pokemon.nameFR;
         this.evolution = pokemon.evolution;
+        this.is_legendary = pokemon.is_legendary;
     };
 
     isDead(): Boolean {

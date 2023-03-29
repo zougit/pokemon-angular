@@ -7,7 +7,7 @@ import {pokedbrouter} from "./pokedb";
 
 export function buildRoutes(app: Express){
     app.use("/auth", authRouter);
-    app.use("/poke",auth, pokeRouter);
+    app.use("/poke", pokeRouter);
     app.use("/todos", todoRoutes);
     app.use("/pokedb", pokedbrouter);
 }
