@@ -58,6 +58,4 @@ export class Pokemon implements PokemonProps{
         return this.moves[Math.floor(random() * this.moves.length)];
     }
 
-    
-
 }

@@ -24,12 +24,11 @@ export class PokemonBuilder {
 
       const idEvoChain = pokeSpeciesApi.evolution_chain.url.split("/");
       let evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
+      if (pokemonApi.name == evo) evo = "";
+
       // console.log("mythique"+pokeSpeciesApi.is_mythical);
       // console.log("is_legendary"+pokeSpeciesApi.is_legendary);
-
       let is_legendary = pokeSpeciesApi.is_legendary || pokeSpeciesApi.is_mythical ? true: false;
-
-      if (pokemonApi.name == evo) evo = "";
 
       const pokemon = new Pokemon({
         name: pokemonApi.name,

@@ -10,7 +10,9 @@ import {
   PrimaryKey,
   Unique,
   Default,
+  HasMany,
 } from "sequelize-typescript";
+import { Team } from "./team";
 
 @Table({
   timestamps: false,
@@ -33,13 +35,16 @@ export class User extends Model<User> {
   @Column(STRING)
   password!: string;
   
-  // @AllowNull(false)
-  // @NotEmpty
-  // @Column(STRING)
-  // role!: string;
+  @AllowNull(false)
+  @NotEmpty
+  @Column(STRING)
+  role!: string;
 
   @AllowNull(true)
   @Default(0)
   @Column(INTEGER)
   money?: number;
+
+  @HasMany(() => Team)
+  teams!: Team[];
 }
