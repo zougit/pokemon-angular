@@ -19,29 +19,32 @@ pokeRouter.get("/getPoke/:name", async (req, res) => {
 });
 
 //TODO - finir ça 
-// pokeRouter.get("/getPokeFR/:name", async (req, res) => {
-//   const builder = await PokemonBuilder.getInstance();
-//   if (req.params.name !== undefined) {
+pokeRouter.get("/getPokeFR/:name", async (req, res) => {
+  const builder = await PokemonBuilder.getInstance();
+  if (req.params.name !== undefined) {
 
-//     const pokeid = await builder.frenchName(req.params.name);
-//     console.log(pokeid);
+    const poke = await builder.frenchName(req.params.name);
+    let pokeid = undefined;
+    if (poke != undefined && poke != null) pokeid = poke[0].id;
+    // console.log(pokeid);
     
-//     if (pokeid != -1) {
+    if (pokeid != undefined) {
+      
+      const pokemon = await builder.create(pokeid);
+      
+      if (pokemon === null) {
+        res.status(400).end();
+      } else {
+        res.status(200).json(pokemon).end();
+      }
 
-//       const pokemon = await builder.create(pokeid);
-//       if (pokemon === null) {
-//         res.status(400).end();
-//       } else {
-//         res.status(200).json(pokemon).end();
-//       }
+    } else {
+      res.status(404).end();
+    }
 
-//     } else {
-//       res.status(404).end();
-//     }
-
-//   }
-//   res.status(400).end();
-// });
+  }
+  res.status(400).end();
+});
 
 pokeRouter.get("/getPokeById/:id", async (req, res) => {
   const builder = await PokemonBuilder.getInstance();
