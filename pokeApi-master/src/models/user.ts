@@ -11,8 +11,10 @@ import {
   Unique,
   Default,
   HasMany,
+  BelongsToMany,
 } from "sequelize-typescript";
 import { Team } from "./team";
+import { Pokedb } from "./pokedb";
 
 @Table({
   timestamps: false,
@@ -47,4 +49,8 @@ export class User extends Model<User> {
 
   @HasMany(() => Team)
   teams!: Team[];
+
+  // @HasMany(() => Pokedb)
+  // @BelongsToMany(() => Pokedb, () => UserPokemon)
+  // pokemons!: Pokedb[];
 }

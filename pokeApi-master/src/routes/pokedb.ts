@@ -1,25 +1,19 @@
 import { Router } from "express";
 
-import {
-  createPoke,
-  deletePoke,
-  getAllPoke,
-  updatePoke,
-  getPokeById,
-} from "../controllers/pokedb";
+import * as pokeControllers from "../controllers/pokedb";
 
 const pokedbrouter = Router();
 
-pokedbrouter.post("/add/", createPoke);
+pokedbrouter.post("/add/", pokeControllers.createPoke);
 
-pokedbrouter.get("/getAll/", getAllPoke);
-pokedbrouter.get("/getAll/:user", getAllPoke);
+pokedbrouter.get("/getAll/", pokeControllers.getAllPoke);
+pokedbrouter.get("/getAll/:user", pokeControllers.getAllPoke);
 
 // pokedbrouter.get("/get/:id", getPokeById);
-pokedbrouter.get("/get/:id&:user/", getPokeById);
+pokedbrouter.get("/get/:id&:user/", pokeControllers.getPokeById);
 
-pokedbrouter.put("/update/:id&:user/", updatePoke);
+pokedbrouter.put("/update/:id&:user/", pokeControllers.updatePoke);
 
-pokedbrouter.delete("/delete/:id&:user/", deletePoke);
+pokedbrouter.delete("/delete/:id&:user/", pokeControllers.deletePoke);
 
 export {pokedbrouter};

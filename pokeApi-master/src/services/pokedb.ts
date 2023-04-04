@@ -1,8 +1,10 @@
 import { Pokedb } from "../models";
 
-export async function create(poke: Pokedb): Promise<void> {
+export async function create(poke: Pokedb) {
     try {
-      await Pokedb.create(poke);
+      
+      return await Pokedb.create(poke);
+
     } catch (error) {
       throw error;
     }

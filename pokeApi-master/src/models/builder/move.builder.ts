@@ -1,5 +1,5 @@
 import PokeAPI from "pokeapi-typescript";
-import { Move } from "../../models";
+import { Move } from "..";
 
 
 export class MoveBuilder{

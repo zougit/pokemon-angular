@@ -1,8 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { Todos } from "../models/todo";
-import { Pokedb, User } from "../models";
+import { Pokedb, User, Team } from "../models";
 import dotenv from 'dotenv';
-import { Team } from "../models/team";
 dotenv.config();
 
 const connection = new Sequelize({

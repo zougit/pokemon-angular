@@ -1,6 +1,6 @@
 
 import express from "express";
-import { buildRoutes } from "./routes";
+import { buildRoutes } from "./routes/buildroute";
 import connection from "./config/config";
 import dotenv from 'dotenv';
 dotenv.config();

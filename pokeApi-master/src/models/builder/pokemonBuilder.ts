@@ -1,6 +1,7 @@
-import { Pokemon } from "../../models";
+import { Pokemon } from "..";
 import PokeAPI, { IMove, IPokemon, IPokemonSpecies } from "pokeapi-typescript";
-import { Move } from "../../models";
+import { Move } from "..";
+import { IEvolution } from "../evolution";
 
 export class PokemonBuilder {
   private static instance: PokemonBuilder;
@@ -24,10 +25,7 @@ export class PokemonBuilder {
 
       const idEvoChain = pokeSpeciesApi.evolution_chain.url.split("/");
       let evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
-      if (pokemonApi.name == evo) evo = "";
-
-      // console.log("mythique"+pokeSpeciesApi.is_mythical);
-      // console.log("is_legendary"+pokeSpeciesApi.is_legendary);
+      if (pokemonApi.name == evo.name) {evo.name = "";evo.tier = 3;}
       let is_legendary = pokeSpeciesApi.is_legendary || pokeSpeciesApi.is_mythical ? true: false;
 
       const pokemon = new Pokemon({
@@ -42,9 +40,9 @@ export class PokemonBuilder {
         type: pokemonApi.types[0].type.name,
         id: pokemonApi.id,
         nameFR: pokeSpeciesApi.names[4].name,
-        evolution: evo,
+        evolution: evo.name,
+        tier: evo.tier,
         is_legendary: is_legendary,
-        // is_legendary: false,
       });
 
       await this.setMoveRandom(pokemon, pokemonApi);
@@ -57,26 +55,26 @@ export class PokemonBuilder {
 
   public async evolution(id: number, pokeSpecies: IPokemonSpecies) {
     const evolution_chain = await PokeAPI.EvolutionChain.resolve(id);
-    let evolution;
+    let evolution!: IEvolution ;
     // console.log(evolution_chain.chain.evolves_to);
 
     if (evolution_chain.chain.evolves_to.length != 0) {
       if (pokeSpecies.evolves_from_species != null) {
-        evolution = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
+        evolution.name = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
+        evolution.tier = 2;
       } else {
-        evolution = evolution_chain.chain.evolves_to[0].species.name;
+        evolution.name = evolution_chain.chain.evolves_to[0].species.name;
+        evolution.tier = 1;
       }
     } else {
-      evolution = "";
+      evolution.name = "";
+      evolution.tier = 1;
     }
 
     return evolution;
   }
 
-  public async setMoveRandom(
-    pokemon: Pokemon,
-    pokemonApi: IPokemon
-  ): Promise<void> {
+  public async setMoveRandom(pokemon: Pokemon,pokemonApi: IPokemon): Promise<void> {
     let movePosition: number;
     let moveApi: IMove;
     for (let i = 0; i < 4; i++) {

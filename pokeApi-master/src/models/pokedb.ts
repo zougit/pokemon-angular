@@ -6,9 +6,11 @@ import {
   AllowNull,
   NotEmpty,
   PrimaryKey,
-  ForeignKey
+  ForeignKey,
+  BelongsTo,
+  BelongsToMany
 } from "sequelize-typescript";
-import { User } from "./user";
+import { User, Team} from "./";
 
 @Table({
   timestamps: false,
@@ -39,9 +41,9 @@ export class Pokedb extends Model<Pokedb> {
   @Column(INTEGER)
   lvl!: number;
 
-  @ForeignKey(() => User)
-  @AllowNull(false)
-  @NotEmpty
-  @Column(INTEGER)
-  user_id!: number;
+  // @BelongsToMany(() => User, () => UserPokemon)
+  // users!: User[];
+
+  // @BelongsToMany(() => Team, () => TeamPokemon)
+  // teams!: Team[];
 }
