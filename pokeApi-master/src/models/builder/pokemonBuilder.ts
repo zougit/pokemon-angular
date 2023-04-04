@@ -120,7 +120,7 @@ export class PokemonBuilder {
 
     return false;
   }
-
+//NOTE -  marche bien jusqu'à 300 après ça dépend
   public async frenchName(pokename: string) {
     try {
       let offset = 0;

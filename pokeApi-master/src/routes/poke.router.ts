@@ -18,7 +18,6 @@ pokeRouter.get("/getPoke/:name", async (req, res) => {
   res.status(400).end();
 });
 
-//TODO - finir ça 
 pokeRouter.get("/getPokeFR/:name", async (req, res) => {
   const builder = await PokemonBuilder.getInstance();
   if (req.params.name !== undefined) {
