@@ -50,7 +50,6 @@ export class User extends Model<User> {
   @HasMany(() => Team)
   teams!: Team[];
 
-  // @HasMany(() => Pokedb)
-  // @BelongsToMany(() => Pokedb, () => UserPokemon)
-  // pokemons!: Pokedb[];
+  @HasMany(() => Pokedb)
+  pokemons!: Pokedb[];
 }

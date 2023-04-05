@@ -13,7 +13,6 @@ export const getAllPoke: RequestHandler = async (req, res, next) => {
   const user_id = req.params.user;
   let allPoke: Pokedb[];
   if (user_id !== undefined) {
-    // allPoke = await Pokedb.findAll({include : [{model: UserPokemon},{model: TeamPokemon}]});
     allPoke = await Pokedb.findAll();
   } else {
     allPoke = await Pokedb.findAll();
@@ -24,27 +23,27 @@ export const getAllPoke: RequestHandler = async (req, res, next) => {
 };
 
 export const getPokeById: RequestHandler = async (req, res, next) => {
-  const id = req.params.id;
+  const id_poke = req.params.id;
   const user_id = req.params.user;
-  const poke: Pokedb | null = await Pokedb.findOne({ where: { id } });
+  const poke: Pokedb | null = await Pokedb.findOne({ where: { id_poke } });
   return res
     .status(200)
     .json({ message: "poke fetched successfully", data: poke });
 };
 
 export const updatePoke: RequestHandler = async (req, res, next) => {
-  let id = req.params.id;
+  let id_poke = req.params.id;
   let user_id = req.params.user;
   const pokeupdate: Pokedb | null = await Pokedb.findOne({
-    where: { id },
+    where: { id_poke },
   });
   
   if (pokeupdate != null) {
-    await Pokedb.update({ ...req.body }, { where: { id } });
-    id = req.body.id;
+    await Pokedb.update({ ...req.body }, { where: { id_poke } });
+    id_poke = req.body.id_poke;
     user_id = req.body.user_id;
     const updatedPoke: Pokedb | null = await Pokedb.findOne({
-      where: { id },
+      where: { id_poke },
     });
     return res
       .status(200)
@@ -55,14 +54,14 @@ export const updatePoke: RequestHandler = async (req, res, next) => {
 };
 
 export const deletePoke: RequestHandler = async (req, res, next) => {
-  const id = req.params.id;
+  const id_poke = req.params.id;
   const user_id = req.params.user;
   const deletedPoke: Pokedb | null = await Pokedb.findOne({
-    where: { id },
+    where: { id_poke },
   });
   
   if (deletedPoke != null) {
-    await Pokedb.destroy({ where: { id} });
+    await Pokedb.destroy({ where: { id_poke} });
     return res
       .status(200)
       .json({ message: "poke deleted successfully", data: deletedPoke });

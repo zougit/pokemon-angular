@@ -45,20 +45,6 @@ pokeRouter.get("/getPokeFR/:name", async (req, res) => {
   res.status(400).end();
 });
 
-pokeRouter.get("/getPokeById/:id", async (req, res) => {
-  const builder = await PokemonBuilder.getInstance();
-  if (req.params.id !== undefined) {
-    const pokemon = await builder.create(req.params.id);
-    if (pokemon === null) {
-      res.status(400).end();
-    } else {
-      res.status(200).json(pokemon).end();
-    }
-  }
-
-  res.status(400).end();
-});
-
 pokeRouter.get("/getAll", async (req, res) => {
   const pokeCardService = PokeCardService.getInstance();
 

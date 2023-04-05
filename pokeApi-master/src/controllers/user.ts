@@ -13,7 +13,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 
 export const getAllUser: RequestHandler = async (req, res, next) => {
   const alluser = await User.findAll({
-    // include: [{ model: Team }, { model: Pokedb }],
+    include: [{ model: Team, include: [{ model: Pokedb}] }, { model: Pokedb }],
   });
   return res
     .status(200)

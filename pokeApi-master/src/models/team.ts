@@ -11,6 +11,7 @@ import {
   BelongsTo,
   ForeignKey,
   BelongsToMany,
+  HasMany,
 } from "sequelize-typescript";
 import { User } from "./user";
 import { Pokedb } from "./pokedb";
@@ -36,8 +37,8 @@ export class Team extends Model<Team> {
   @BelongsTo(() => User)
   user!: User;
 
-  // @BelongsToMany(() => Pokedb, () => TeamPokemon)
-  // pokemons!: Pokedb[];
+  @HasMany(() => Pokedb)
+  pokemons!: Pokedb[];
 
   // @AllowNull(true)
   // @Default(0)
