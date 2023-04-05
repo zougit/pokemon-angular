@@ -27,7 +27,7 @@ export async function addPoke(team_id: number, id_poke: number) {
       if (poketeam.length >= 6) return 6;
 
       await Pokedb.update({ team_id }, { where: { id_poke } });
-      return Team.findOne({ where: { id: team_id }, include: { model: Pokedb } });
+      return Team.findOne({ where: { id: team_id }, include: [{ model: Pokedb ,attributes: ['id_poke','name','user_id']}] });
     } else if (pokeupdate != null && pokeupdate.team_id == team_id) {
       return -1;
     } else {
