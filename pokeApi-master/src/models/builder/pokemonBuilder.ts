@@ -1,5 +1,11 @@
 import { Pokemon } from "..";
-import PokeAPI, { IMove, IName, INamedApiResource, IPokemon, IPokemonSpecies } from "pokeapi-typescript";
+import PokeAPI, {
+  IMove,
+  IName,
+  INamedApiResource,
+  IPokemon,
+  IPokemonSpecies,
+} from "pokeapi-typescript";
 import { Move } from "..";
 import { IEvolution } from "../evolution";
 
@@ -24,19 +30,14 @@ export class PokemonBuilder {
       // console.log(pokeSpeciesApi);
 
       const idEvoChain = pokeSpeciesApi.evolution_chain.url.split("/");
-      // let evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
-      // if (pokemonApi.name == evo.name) {
-      //   evo.name = "";
-      //   evo.tier = 3;
-      // }
-      // console.log("debug 1");
+      let evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
+      if (pokemonApi.name == evo.name) {
+        evo.name = "";
+        evo.tier = 3;
+      }
 
-      let is_legendary =
-        pokeSpeciesApi.is_legendary || pokeSpeciesApi.is_mythical
-          ? true
-          : false;
+      let is_legendary = pokeSpeciesApi.is_legendary || pokeSpeciesApi.is_mythical ? true : false;
 
-      // console.log("debug 2");
       const pokemon = new Pokemon({
         name: pokemonApi.name,
         hp: pokemonApi.stats[0].base_stat,
@@ -49,14 +50,11 @@ export class PokemonBuilder {
         type: pokemonApi.types[0].type.name,
         id: pokemonApi.id,
         nameFR: pokeSpeciesApi.names[4].name,
-        // evolution: evo.name,
-        // tier: evo.tier,
-        evolution: "",
-        tier: 1,
+        evolution: evo.name,
+        tier: evo.tier,
         is_legendary: is_legendary,
       });
 
-      // console.log("debug 3");
       await this.setMoveRandom(pokemon, pokemonApi);
 
       return pokemon;
@@ -67,13 +65,12 @@ export class PokemonBuilder {
 
   public async evolution(id: number, pokeSpecies: IPokemonSpecies) {
     const evolution_chain = await PokeAPI.EvolutionChain.resolve(id);
-    let evolution!: IEvolution;
+    let evolution: IEvolution = { name: "", tier: 1 };
     // console.log(evolution_chain.chain.evolves_to);
 
     if (evolution_chain.chain.evolves_to.length != 0) {
       if (pokeSpecies.evolves_from_species != null) {
-        evolution.name =
-          evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
+        evolution.name = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
         evolution.tier = 2;
       } else {
         evolution.name = evolution_chain.chain.evolves_to[0].species.name;
@@ -87,18 +84,13 @@ export class PokemonBuilder {
     return evolution;
   }
 
-  public async setMoveRandom(
-    pokemon: Pokemon,
-    pokemonApi: IPokemon
-  ): Promise<void> {
+  public async setMoveRandom(pokemon: Pokemon, pokemonApi: IPokemon): Promise<void> {
     let movePosition: number;
     let moveApi: IMove;
     for (let i = 0; i < 4; i++) {
       do {
         movePosition = Math.floor(Math.random() * pokemonApi.moves.length);
-        moveApi = await PokeAPI.Move.resolve(
-          pokemonApi.moves[movePosition].move.name
-        );
+        moveApi = await PokeAPI.Move.resolve(pokemonApi.moves[movePosition].move.name);
       } while (this.moveIsSet(pokemon, moveApi));
 
       pokemon.moves[i] = new Move({
@@ -120,38 +112,36 @@ export class PokemonBuilder {
 
     return false;
   }
-//NOTE -  marche bien jusqu'à 300 après ça dépend
+  // marche bien jusqu'à 300 après ça dépend
   public async frenchName(pokename: string) {
     try {
       let offset = 0;
-      let pokeFrench: Promise<{ id: number; fr: string }[]>;
+      let pokeFrench;
       let poke;
-      do{
+      do {
         let pokeList = await PokeAPI.PokemonSpecies.list(100, offset);
         // console.log(pokeList);
-        
+
         pokeFrench = Promise.all(
           pokeList.results.map(async (x) => {
             let pokefr = await PokeAPI.PokemonSpecies.resolve(x.name);
             // console.log(pokefr.id);
-            
+
             // let idname = pokefr.names.indexOf(({language: {name: "fr" }} as IName))
             // console.log("index : "+idname);
             return { id: pokefr.id, fr: pokefr.names[4].name };
           })
         );
-        
+
         if (Object.keys(await pokeFrench).length !== 0) {
-          poke = (await pokeFrench).filter(
-            (x) => x.fr.toLowerCase() === pokename.toLowerCase()
-          );
+          poke = (await pokeFrench).filter((x) => x.fr.toLowerCase() === pokename.toLowerCase());
           console.log(poke);
-          
+
           if (poke.toString() != "") return poke;
         }
         offset += 100;
         console.log("offset " + offset);
-      }while (poke == undefined || poke.toString() == "" && offset <= 1000);
+      } while (poke == undefined || (poke.toString() == "" && offset <= 1000));
 
       return null;
     } catch {
