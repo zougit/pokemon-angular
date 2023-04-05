@@ -47,9 +47,9 @@ export const updatePoke: RequestHandler = async (req, res, next) => {
     });
     return res
       .status(200)
-      .json({ message: "poke updated successfully", data: updatedPoke });
+      .json({ message: "poke updated successfully", data: updatedPoke }).end();
   } else {
-    return res.status(404);
+    return res.status(404).end();
   }
 };
 
@@ -64,8 +64,8 @@ export const deletePoke: RequestHandler = async (req, res, next) => {
     await Pokedb.destroy({ where: { id_poke} });
     return res
       .status(200)
-      .json({ message: "poke deleted successfully", data: deletedPoke });
+      .json({ message: "poke deleted successfully", data: deletedPoke }).end();
   } else {
-    return res.status(404);
+    return res.status(404).end();
   }
 };
