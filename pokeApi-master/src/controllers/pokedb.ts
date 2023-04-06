@@ -3,7 +3,7 @@ import { Pokedb } from "../models";
 import * as PokeServices from '../services/pokedb';
 
 export const createPoke: RequestHandler = async (req, res, next) => {
-  var poke = await PokeServices.create({ ...req.body });
+  const poke = await PokeServices.create({ ...req.body });
   return res
     .status(201)
     .json({ message: "poke created successfully", data: poke });

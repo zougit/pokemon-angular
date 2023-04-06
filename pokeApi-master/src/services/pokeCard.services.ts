@@ -1,4 +1,4 @@
-import PokeAPI, { IPokemon } from "pokeapi-typescript";
+import PokeAPI from "pokeapi-typescript";
 import { PokeCardProps } from "../models";
 export class PokeCardService{
 

@@ -8,7 +8,7 @@
     "bracketSameLine": false,
     "jsxBracketSameLine": false,
     "jsxSingleQuote": false,
-    "printWidth": 100,
+    "printWidth": 130,
     "proseWrap": "preserve",
     "quoteProps": "as-needed",
     "requirePragma": false,
@@ -17,9 +17,5 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false,
-    "vueIndentScriptAndStyle": false,
-    "filepath": "c:\\wamp64\\www\\pokemon-angular\\pokeApi-master\\src\\models\\builder\\pokemonBuilder.ts",
-    "parser": "typescript",
-    "rangeEnd": 3148,
-    "rangeStart": 2186
+    "vueIndentScriptAndStyle": false
 }

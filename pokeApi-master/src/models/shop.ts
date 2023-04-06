@@ -11,9 +11,9 @@ import {
   NotEmpty,
 } from "sequelize-typescript";
 import { User, PokeShop } from ".";
-import { INTEGER } from "sequelize";
+import { INTEGER, STRING } from "sequelize";
 
-@Table({ timestamps: false, tableName: "shops" })
+@Table({ tableName: "shops" })
 export class Shop extends Model<Shop> {
   @AutoIncrement
   @PrimaryKey
@@ -22,14 +22,14 @@ export class Shop extends Model<Shop> {
   
   @AllowNull(false)
   @NotEmpty
-  @Column
+  @Column(STRING)
   name!: string;
 
   @ForeignKey(() => User)
   @AllowNull(false)
   @NotEmpty
-  @Column
-  userId!: number;
+  @Column(INTEGER)
+  user_id!: number;
 
   @BelongsTo(() => User)
   user!: User;

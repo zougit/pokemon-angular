@@ -29,8 +29,12 @@ export class PokemonBuilder {
       // console.log("poke Species Api");
       // console.log(pokeSpeciesApi);
 
-      const idEvoChain = pokeSpeciesApi.evolution_chain.url.split("/");
-      let evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
+      let idEvoChain;
+      let evo: IEvolution = { name: "", tier: 1 }
+      if (pokeSpeciesApi.evolution_chain != null) {
+        idEvoChain = pokeSpeciesApi.evolution_chain.url.split("/");
+        evo = await this.evolution(Number(idEvoChain[6]), pokeSpeciesApi);
+      }
       if (pokemonApi.name == evo.name) {
         evo.name = "";
         evo.tier = 3;
@@ -67,18 +71,20 @@ export class PokemonBuilder {
     const evolution_chain = await PokeAPI.EvolutionChain.resolve(id);
     let evolution: IEvolution = { name: "", tier: 1 };
     // console.log(evolution_chain.chain.evolves_to);
-
     if (evolution_chain.chain.evolves_to.length != 0) {
-      if (pokeSpecies.evolves_from_species != null) {
-        evolution.name = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
-        evolution.tier = 2;
-      } else {
-        evolution.name = evolution_chain.chain.evolves_to[0].species.name;
-        evolution.tier = 1;
-      }
+        if (pokeSpecies.evolves_from_species != null && evolution_chain.chain.evolves_to[0].evolves_to.length != 0) {
+            evolution.name = evolution_chain.chain.evolves_to[0].evolves_to[0].species.name;
+            evolution.tier = 2;
+        } else if (pokeSpecies.evolves_from_species != null && evolution_chain.chain.evolves_to[0].evolves_to.length == 0) {
+            evolution.name = "";
+            evolution.tier = 2;
+        } else {
+            evolution.name = evolution_chain.chain.evolves_to[0].species.name;
+            evolution.tier = 1;
+        }
     } else {
-      evolution.name = "";
-      evolution.tier = 1;
+        evolution.name = "";
+        evolution.tier = 1;
     }
 
     return evolution;
@@ -141,7 +147,7 @@ export class PokemonBuilder {
         }
         offset += 100;
         console.log("offset " + offset);
-      } while (poke == undefined || (poke.toString() == "" && offset <= 1000));
+      } while (poke == undefined || (poke.toString() == "" && offset < 1000));
 
       return null;
     } catch {

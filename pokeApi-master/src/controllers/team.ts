@@ -5,7 +5,7 @@ import * as teamServices from '../services/team';
 
 
 export const createTeam: RequestHandler = async (req, res, next) => {
-    var team = await teamServices.create({ ...req.body });
+    const team = await teamServices.create({ ...req.body });
     return res
       .status(201)
       .json({ message: "Team created successfully", data: team }).end();

@@ -1,7 +1,7 @@
 import {Express} from "express";
 import { auth } from "../middleware/auth";
 // import todoRoutes from "./todo";
-import { authRouter,pokeRouter,pokedbrouter,teamrouter,userRouter } from "./";
+import { authRouter,pokeRouter,pokeShoprouter,pokedbrouter,teamrouter,userRouter } from "./";
 
 export function buildRoutes(app: Express){
     // app.use("/todos", todoRoutes);
@@ -10,4 +10,5 @@ export function buildRoutes(app: Express){
     app.use("/pokedb", pokedbrouter);
     app.use("/team", teamrouter);
     app.use("/user", userRouter);
+    app.use("/pokeShop", pokeShoprouter);
 }

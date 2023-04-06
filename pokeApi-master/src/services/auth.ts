@@ -1,7 +1,8 @@
-import { User } from "../models";
+import { PokeShop, Shop, User } from "../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../middleware/auth";
+import { createPokeShop } from "./pokeShop";
 
 
 
@@ -32,6 +33,13 @@ export async function register(user: User): Promise<void> {
 
     if (is_goodRole && !user_exist) {
       await User.create(user);
+      const u = await User.findOne({where : {username: user.username}})
+      if(u){
+        // console.log(({name : "shop",user_id: u.id } as Shop));
+        await Shop.create(({name : "shop",user_id: u.id } as Shop));
+        const shop = await Shop.findOne({where : {user_id: u.id}})
+        if (shop) await createPokeShop(shop.id);
+      }
     } else if(!is_goodRole) {
       throw new Error("roles are : user or admin");
     } else if(user_exist) {
@@ -46,7 +54,7 @@ export async function register(user: User): Promise<void> {
 export async function login(user: User) {
   try {
     if (!user.username || !user.password) throw new Error("need a username,password");
-    
+
     const foundUser = await User.findOne({
       where: { username: user.username },
     });
@@ -58,15 +66,13 @@ export async function login(user: User) {
 
     if (isMatch) {
       const token = jwt.sign({ _id: foundUser.id?.toString(), username: foundUser.username }, SECRET_KEY, {
-        expiresIn: '1 days',
+        expiresIn: "1 days",
       });
- 
-      return { user: { _id: foundUser.id?.toString(), username: foundUser.username }, token: token };
 
+      return { user: { _id: foundUser.id?.toString(), username: foundUser.username }, token: token };
     } else {
       throw new Error("Password is not correct");
     }
-
   } catch (error) {
     throw error;
   }

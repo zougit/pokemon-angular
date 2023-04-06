@@ -7,14 +7,9 @@ import {
   AutoIncrement,
   NotEmpty,
   PrimaryKey,
-  Default,
   BelongsTo,
   ForeignKey,
-  BelongsToMany,
-  HasMany,
 } from "sequelize-typescript";
-import { User } from "./user";
-import { Pokedb } from "./pokedb";
 import { Shop } from "./shop";
 
 @Table({ timestamps: false, tableName: "pokeshop" })
@@ -31,13 +26,24 @@ export class PokeShop extends Model<PokeShop> {
 
   @AllowNull(false)
   @NotEmpty
-  @Column(STRING)
-  price!: string;
+  @Column(INTEGER)
+  poke_id!: number; 
 
   @AllowNull(false)
   @NotEmpty
-  @Column(STRING)
-  lvl!: string;
+  @Column(INTEGER)
+  price!: number;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column(INTEGER)
+  lvl!: number;
+  
+  @ForeignKey(() => Shop)
+  @AllowNull(false)
+  @NotEmpty
+  @Column(INTEGER)
+  shop_id!: number;
   
   @BelongsTo(() => Shop)
   shop!: Shop;
