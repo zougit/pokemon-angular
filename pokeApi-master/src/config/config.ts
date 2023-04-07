@@ -1,5 +1,4 @@
 import { Sequelize } from "sequelize-typescript";
-import { Todos } from "../models/todo";
 import { Pokedb, User, Team, PokeShop, Shop } from "../models";
 import dotenv from 'dotenv';
 dotenv.config();

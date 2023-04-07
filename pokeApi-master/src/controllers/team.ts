@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { User } from "../models";
 import { Team } from "../models/team";
 import * as teamServices from '../services/team';
+import PokeAPI from "pokeapi-typescript";
+import { PokemonBuilder } from "../models/builder";
 
 
 export const createTeam: RequestHandler = async (req, res, next) => {
@@ -32,3 +34,49 @@ export const addPoke: RequestHandler = async (req, res, next) => {
       return res.status(404).end()
     }
 };
+
+export const getRandomTeam: RequestHandler = async (req, res, next) => {
+  let random, randomlvl;
+  let pokeList: any[] = [];
+  let lvlList: any[] = [];
+  const builder = await PokemonBuilder.getInstance();
+
+  while (pokeList.length <= 6) {
+    random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
+    randomlvl = Math.floor(Math.random() * 25);
+    const pokeRandom = await PokeAPI.Pokemon.resolve(random)
+    // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
+    if (pokeList.filter((e) => {return e.name === pokeRandom?.name;}).length == 0) {
+      const poke = await builder.create(random);
+      if (poke?.is_legendary == false) {
+        pokeList.push(poke);
+      }
+    }
+    lvlList.push(randomlvl);
+  }
+  return res.status(200).json({ message: "Team fetched successfully", data: pokeList }).end();
+}
+
+export const getRandomTeamByType: RequestHandler = async (req, res, next) => {
+  let type = req.params.type;
+  let random, randomlvl;
+  let pokeList: any[] = [];
+  let lvlList: any[] = [];
+  const builder = await PokemonBuilder.getInstance();
+
+  while (pokeList.length <= 6) {
+    random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
+    randomlvl = Math.floor(Math.random() * 25);
+    const pokeRandom = await PokeAPI.Pokemon.resolve(random)
+    // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
+    if (pokeList.filter((e) => {return e.name === pokeRandom.name;}).length == 0 && pokeRandom.types[0].type.name == type) {
+      const poke = await builder.create(random);
+      if (poke?.is_legendary == false ) {
+        pokeList.push(poke);
+      }
+    }
+    lvlList.push(randomlvl);
+  }
+
+  return res.status(200).json({ message: "Team fetched successfully", data: pokeList }).end();
+} 

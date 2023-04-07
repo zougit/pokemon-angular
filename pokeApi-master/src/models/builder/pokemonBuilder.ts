@@ -118,6 +118,7 @@ export class PokemonBuilder {
 
     return false;
   }
+  
   // marche bien jusqu'à 300 après ça dépend
   public async frenchName(pokename: string) {
     try {

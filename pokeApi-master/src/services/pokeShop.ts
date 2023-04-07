@@ -24,18 +24,14 @@ async function getPokeShop(shop_id: number) {
     randomlvl = Math.floor(Math.random() * 25);
     const pokeRandom = await PokeAPI.PokemonSpecies.resolve(random);
     // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
-    if (
-      pokeList.filter(function (e) {
-        return e.name === pokeRandom.name;
-      }).length == 0
-    ) {
+    if (pokeList.filter(function (e) {return e.name === pokeRandom.name;}).length == 0) {
       pokeList.push(pokeRandom);
     }
     lvlList.push(randomlvl);
   }
 
   let pokeListMap = null;
-  if (pokeList != null) {
+  if (pokeList.length > 0) {
     pokeListMap = Promise.all(
       pokeList.map(async (x, i) => {
         let idEvoChain;
