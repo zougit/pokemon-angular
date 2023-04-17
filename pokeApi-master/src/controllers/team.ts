@@ -36,47 +36,12 @@ export const addPoke: RequestHandler = async (req, res, next) => {
 };
 
 export const getRandomTeam: RequestHandler = async (req, res, next) => {
-  let random, randomlvl;
-  let pokeList: any[] = [];
-  let lvlList: any[] = [];
-  const builder = await PokemonBuilder.getInstance();
-
-  while (pokeList.length <= 6) {
-    random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
-    randomlvl = Math.floor(Math.random() * 25);
-    const pokeRandom = await PokeAPI.Pokemon.resolve(random)
-    // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
-    if (pokeList.filter((e) => {return e.name === pokeRandom?.name;}).length == 0) {
-      const poke = await builder.create(random);
-      if (poke?.is_legendary == false) {
-        pokeList.push(poke);
-      }
-    }
-    lvlList.push(randomlvl);
-  }
+  const pokeList = await teamServices.getRandomTeam();
   return res.status(200).json({ message: "Team fetched successfully", data: pokeList }).end();
 }
 
 export const getRandomTeamByType: RequestHandler = async (req, res, next) => {
   let type = req.params.type;
-  let random, randomlvl;
-  let pokeList: any[] = [];
-  let lvlList: any[] = [];
-  const builder = await PokemonBuilder.getInstance();
-
-  while (pokeList.length <= 6) {
-    random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
-    randomlvl = Math.floor(Math.random() * 25);
-    const pokeRandom = await PokeAPI.Pokemon.resolve(random)
-    // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
-    if (pokeList.filter((e) => {return e.name === pokeRandom.name;}).length == 0 && pokeRandom.types[0].type.name == type) {
-      const poke = await builder.create(random);
-      if (poke?.is_legendary == false ) {
-        pokeList.push(poke);
-      }
-    }
-    lvlList.push(randomlvl);
-  }
-
+  const pokeList = await teamServices.getRandomTeamByType(type);
   return res.status(200).json({ message: "Team fetched successfully", data: pokeList }).end();
 } 
