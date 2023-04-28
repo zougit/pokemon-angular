@@ -35,13 +35,12 @@ export const updatePoke: RequestHandler = async (req, res, next) => {
   let id_poke = req.params.id;
   let user_id = req.params.user;
   const pokeupdate: Pokedb | null = await Pokedb.findOne({
-    where: { id_poke },
+    where: { id_poke,user_id },
   });
   
   if (pokeupdate != null) {
     await Pokedb.update({ ...req.body }, { where: { id_poke } });
-    id_poke = req.body.id_poke;
-    user_id = req.body.user_id;
+    id_poke = req.body.id_poke || req.params.id;
     const updatedPoke: Pokedb | null = await Pokedb.findOne({
       where: { id_poke },
     });

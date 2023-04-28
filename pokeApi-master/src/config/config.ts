@@ -12,5 +12,14 @@ const connection = new Sequelize({
   logging: false,
   models: [User,Pokedb,Team,PokeShop,Shop]
 });
+const connectionTest = new Sequelize({
+  dialect: "mysql",
+  host: "localhost",
+  username:  process.env.USERDB,
+  password:  process.env.PWDB,
+  database: process.env.DBTEST,
+  logging: false,
+  models: [User,Pokedb,Team,PokeShop,Shop]
+});
 
-export default connection;
+export {connection,connectionTest};

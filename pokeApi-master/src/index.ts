@@ -1,7 +1,7 @@
 
 import express from "express";
 import { buildRoutes } from "./routes/buildroute";
-import connection from "./config/config";
+import {connection} from "./config/config";
 import dotenv from 'dotenv';
 dotenv.config();
 let cors = require("cors");
@@ -33,6 +33,8 @@ connection.sync()
   });
 
 const port = process.env.PORT || 3000;
-app.listen(port, function () {
+const server = app.listen(port, function () {
   console.log(`Listening on ${port}`);
 });
+
+export {app,server}

@@ -9,7 +9,8 @@ import {
   ForeignKey,
   BelongsTo,
   BelongsToMany,
-  AutoIncrement
+  AutoIncrement,
+  DataType
 } from "sequelize-typescript";
 import { User, Team} from "./";
 
@@ -21,45 +22,45 @@ export class Pokedb extends Model<Pokedb> {
   @PrimaryKey
   @AutoIncrement
   @Column(INTEGER)
-  id!: number;
+  declare id: number;
   
   @AllowNull(false)
   @NotEmpty
   @Column(INTEGER)
-  id_poke!: number;
+  declare id_poke: number;
 
   @AllowNull(false)
   @NotEmpty
   @Column(STRING)
-  name!: string;
+  declare name: string;
 
   @AllowNull(false)
   @NotEmpty
   @Column(INTEGER)
-  exp!: number;
+  declare exp: number;
   
   @AllowNull(false)
   @NotEmpty
   @Column(INTEGER)
-  expMax!: number;
+  declare expMax: number;
 
   @AllowNull(false)
   @NotEmpty
   @Column(INTEGER)
-  lvl!: number;
+  declare lvl: number;
 
   @ForeignKey(() => User)
   @AllowNull(false)
   @NotEmpty
   @Column(INTEGER)
-  user_id!: number;
+  declare user_id: number;
   
   @ForeignKey(() => Team)
   @Column(INTEGER)
-  team_id?: number;
+  declare team_id?: number;
   
   @BelongsTo(() => User)
-  user!: User;
+  declare user: User;
 
   // @BelongsTo(() => Team)
   // teams!: Team[];

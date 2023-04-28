@@ -1,4 +1,4 @@
-import {PokeCardService} from "../src/service/pokeCard.services";
+import {PokeCardService} from "../src/services/pokeCard.services";
 
 
 
