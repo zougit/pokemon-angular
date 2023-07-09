@@ -1,9 +1,0 @@
-<form class="d-flex flex-column justify-content-between" [formGroup]="playerForm" (ngSubmit)="onSubmit()">
-
-    <input class="mb-5 mt-5" type="text" formControlName="p1" placeholder="Player 1" required>
-    <input class="mb-5" type="text" formControlName="p2" placeholder="Player 2" required>
-    <button type="submit" [disabled]="!playerForm.valid">Next</button>
-    <button class="backButton menuButton" (click)="lastPage()">
-      <img width="25px" src="./assets/backArrow.svg" alt="">
-    </button>
-</form>
