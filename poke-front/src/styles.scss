@@ -1,0 +1,74 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+body{
+  display: flex;
+  justify-content: center;
+  font-family: sans-serif;
+  background-image: url('./assets/Pokemon-forest-by-BlazingIfrit-Fur-Affinity-dot-net.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-y: hidden;
+  //max-height: 721px;
+}
+
+.hpCard{
+  background-color: #fff;
+  border: solid;
+  width: 250px !important;
+  height: 75px;
+  padding: 0px 10px;
+  border-radius: 5px;
+}
+
+.pokeName{
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.hpLabel{
+  font-size: 10px;
+  font-weight: bold;
+  color: goldenrod;
+  background-color: #000;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.hpInfo{
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.pokeBattle{
+  width: 400px * 1.5;
+  height: 238px * 1.5;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("./assets/battleGround.png");
+  overflow: hidden;
+
+  border: solid 5px black;
+  border-right: 0;
+  border-radius: 10px 0px 0px 10px;
+  z-index: 20;
+}
+
+.backButton{
+  position: fixed;
+  bottom: 10px;
+
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.menuButton{
+  background-color: rgba(0,0,0,0);
+  border: none;
+}
+/* Importing Bootstrap SCSS file. */

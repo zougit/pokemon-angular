@@ -1,0 +1,40 @@
+
+<div class="container pokemon" style="margin-bottom: px0;">
+  <div class="d-flex align-items-end justify-content-around {{ isFront ? 'flex-row-reverse ' : '' }}">
+    <img *ngIf="pokemon.hp > 0" [ngClass]="isFront ? 'spriteFront' : 'spriteBack'" width="150px" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon{{ isFront ? '' : '/back' }}/{{ pokemon !== undefined ? pokemon.id : 0 }}.png" alt="">
+
+    <div class="d-flex justify-content-center align-items-end" *ngIf="pokemon.hp <= 0" [ngClass]="isFront ? 'spriteFront' : 'spriteBack'">
+      <img [ngClass]="isFront ? 'pokebalFront' : 'pokebalBack'" src="./assets/pokeball.png" alt="" >
+    </div>
+
+    <div class="hpCard" [ngClass]="isFront ? 'hpCardFront' : 'hpCardBack'">
+      <div class="playerName">
+        <p>
+          {{player}}
+        </p>
+      </div>
+      <p class="pokeName">
+        {{ pokemon.name | titlecase }}
+      </p>
+      <div class="d-flex align-items-center">
+        <div class="hpLabel">
+          hp
+        </div>
+        <div class="lifeBarRed">
+          <div class="lifeBar" [ngStyle]="{'width': (pokemon.hp / pokemon.hpMax) * 100 + '%'}">
+        </div>
+
+        </div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div>
+
+        </div>
+        <div class="hpInfo">
+          {{ pokemon.hp }}  / {{ pokemon.hpMax }}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
