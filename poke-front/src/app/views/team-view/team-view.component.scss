@@ -1,0 +1,35 @@
+.box {
+  background-color: #3d3d3d;
+  color: #bcbcbc;
+  border-radius: 10px;
+  width: 400px;
+  margin: 5px;
+  padding: 15px;
+  .poke {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    border: solid 2px;
+    border-radius: 80px;
+    border-color: white;
+
+    cursor: pointer;
+
+    margin: 5px;
+    height: 70px;
+
+    .btnadd {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 30px;
+      height: 30px;
+
+      border: solid 2px;
+      border-radius: 50%;
+      border-color: white;
+    }
+  }
+}

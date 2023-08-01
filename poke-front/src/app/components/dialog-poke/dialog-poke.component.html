@@ -1,0 +1,20 @@
+<div class="dialog">
+    <div class="title">
+        <span>
+            <b>Ajouter un pokemon</b>
+        </span>
+        <button (click)="onNoClick()">&times;</button>
+    </div>
+
+    <div class="" *ngFor="let d of data">
+        <div (click)="onClick(d)" class="content">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{d.id_poke}}.png" alt="">
+            <p>
+                <b>
+                    {{d.name}}
+                </b>
+            </p>
+        </div>
+    </div>
+
+</div>

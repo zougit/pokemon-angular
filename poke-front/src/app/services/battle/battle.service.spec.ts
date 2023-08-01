@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RandomBattleService } from './randomBattle.service';
+import { BattleService } from './battle.service';
 
 describe('BattleService', () => {
-  let service: RandomBattleService;
+  let service: BattleService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ teardown: { destroyAfterEach: false } });
-    service = TestBed.inject(RandomBattleService);
+    service = TestBed.inject(BattleService);
   });
 
   it('should be created', () => {

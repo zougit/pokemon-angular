@@ -1,0 +1,40 @@
+<div class="d-flex flex-row" style="width: 100%;">
+    <div class="d-flex flex-column box" *ngIf="pokemon">
+        <div class="d-flex flex-row">
+            <div>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{pokemon.id}}.png"
+                    alt="">
+            </div>
+            <div>
+                <p>name: {{pokemon.name}} </p>
+                <p>lvl: {{pokemon.lvl}}</p>
+                <p>exp: {{pokemon.exp}}/{{pokemon.expMax}}</p>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; flex-wrap: wrap;">
+            <p *ngFor="let stat of stats"> {{stat.name}} : {{stat.key}}</p>
+            <span>moves :
+                <span *ngFor="let m of pokemon.moves"> {{m.name}} /</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column box">
+        <div class="poke" *ngFor="let poke of [].constructor(nbpoke); let i=index">
+            <div *ngIf="pokeTeam[i]" (click)="onClick(i)" class="d-flex flex-row ">
+                <div>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{pokeTeam[i].id}}.png"
+                        alt="">
+                </div>
+                <div class="d-flex flex-column justify-content-center">
+                    <span>name: {{pokeTeam[i].name}} </span>
+                    <span>lvl: {{pokeTeam[i].lvl}}</span>
+                </div>
+            </div>
+        </div>
+        <div (click)="onAdd()" class="poke" *ngFor="let poke of [].constructor(6-nbpoke)">
+            <button class="btnadd">+</button>
+        </div>
+    </div>
+
+</div>

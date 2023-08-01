@@ -18,19 +18,31 @@ export async function getAllTeam() {
   }
 }
 
+export async function getTeamById(id: string) {
+  try {
+    return await Pokedb.findAll({ where: { team_id : id } });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getRandomTeam() {
   try {
     let random, randomlvl;
     let pokeList: any[] = [];
     let lvlList: any[] = [];
     const builder = await PokemonBuilder.getInstance();
-  
+
     while (pokeList.length <= 6) {
       random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
       randomlvl = Math.floor(Math.random() * 25);
-      const pokeRandom = await PokeAPI.Pokemon.resolve(random)
+      const pokeRandom = await PokeAPI.Pokemon.resolve(random);
       // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
-      if (pokeList.filter((e) => {return e.name === pokeRandom?.name;}).length == 0) {
+      if (
+        pokeList.filter((e) => {
+          return e.name === pokeRandom?.name;
+        }).length == 0
+      ) {
         const poke = await builder.create(random);
         if (poke?.is_legendary == false) {
           pokeList.push(poke);
@@ -38,33 +50,38 @@ export async function getRandomTeam() {
       }
       lvlList.push(randomlvl);
     }
-    return pokeList
+    return pokeList;
   } catch (error) {
     throw error;
   }
 }
 
-export async function getRandomTeamByType(type : string) {
+export async function getRandomTeamByType(type: string) {
   try {
-  let random, randomlvl;
-  let pokeList: any[] = [];
-  let lvlList: any[] = [];
-  const builder = await PokemonBuilder.getInstance();
+    let random, randomlvl;
+    let pokeList: any[] = [];
+    let lvlList: any[] = [];
+    const builder = await PokemonBuilder.getInstance();
 
-  while (pokeList.length <= 6) {
-    random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
-    randomlvl = Math.floor(Math.random() * 25);
-    const pokeRandom = await PokeAPI.Pokemon.resolve(random)
-    // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
-    if (pokeList.filter((e) => {return e.name === pokeRandom.name;}).length == 0 && pokeRandom.types[0].type.name == type) {
-      const poke = await builder.create(random);
-      if (poke?.is_legendary == false ) {
-        pokeList.push(poke);
+    while (pokeList.length <= 6) {
+      random = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
+      randomlvl = Math.floor(Math.random() * 25);
+      const pokeRandom = await PokeAPI.Pokemon.resolve(random);
+      // console.log(pokeList.filter(function(e) { return e.name === pokeRandom.name; }).length > 0);
+      if (
+        pokeList.filter((e) => {
+          return e.name === pokeRandom.name;
+        }).length == 0 &&
+        pokeRandom.types[0].type.name == type
+      ) {
+        const poke = await builder.create(random);
+        if (poke?.is_legendary == false) {
+          pokeList.push(poke);
+        }
       }
+      lvlList.push(randomlvl);
     }
-    lvlList.push(randomlvl);
-  }
-    return pokeList
+    return pokeList;
   } catch (error) {
     throw error;
   }
@@ -81,7 +98,7 @@ export async function addPoke(team_id: number, id_poke: number) {
       if (poketeam.length >= 6) return 6;
 
       await Pokedb.update({ team_id }, { where: { id_poke } });
-      return Team.findOne({ where: { id: team_id }, include: [{ model: Pokedb ,attributes: ['id_poke','name','user_id']}] });
+      return Team.findOne({ where: { id: team_id }, include: [{ model: Pokedb, attributes: ["id_poke", "name", "user_id"] }] });
     } else if (pokeupdate != null && pokeupdate.team_id == team_id) {
       return -1;
     } else {

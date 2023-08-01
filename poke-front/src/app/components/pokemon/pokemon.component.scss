@@ -57,7 +57,8 @@
   height: 15px;
   padding: 0px 5px;
   padding-top: 2px;
-  position: absolute;
+  // position: absolute;
+  margin-top: -15px;
   bottom: 72px;
   color: goldenrod;
   background-color: #000;
@@ -65,4 +66,9 @@
   font-weight: bold;
   font-size: 10px;
   border-radius: 8px 8px 0px 0px;
+}
+
+.team {
+  margin-top: -22px;
+  margin-left: 10px;
 }

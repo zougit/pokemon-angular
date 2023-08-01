@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RandomBattleComponent } from './random-battle.component';
+import { battleComponent } from './battle.component';
 
-describe('RandomBattleComponent', () => {
-  let component: RandomBattleComponent;
-  let fixture: ComponentFixture<RandomBattleComponent>;
+describe('battleComponent', () => {
+  let component: battleComponent;
+  let fixture: ComponentFixture<battleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [RandomBattleComponent],
+    declarations: [battleComponent],
     teardown: { destroyAfterEach: false }
 })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RandomBattleComponent);
+    fixture = TestBed.createComponent(battleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
