@@ -30,6 +30,9 @@
                     <span>name: {{pokeTeam[i].name}} </span>
                     <span>lvl: {{pokeTeam[i].lvl}}</span>
                 </div>
+                <button class="btn btn-light btnadd" (click)="onDelete(i)">
+                    -
+                </button>
             </div>
         </div>
         <div (click)="onAdd()" class="poke" *ngFor="let poke of [].constructor(6-nbpoke)">

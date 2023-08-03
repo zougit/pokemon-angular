@@ -18,6 +18,8 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
   pokeTeam: Pokemon[] = [];
   stats!: any;
 
+  isdel = false;
+
   constructor(
     private teamService: TeamService,
     private pokeService: PokemonService,
@@ -76,6 +78,7 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
       console.log('The dialog was closed', result);
       if (result) {
         this.pokedb = result;
+        this.pokedb.team_id = 2;
         this.pokeService.getPokemonById(result.id_poke).subscribe((poke) => {
           this.pokeTeam.push(poke);
           // console.log('poke ', poke);
@@ -89,15 +92,24 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
           //   this.pokeTeam.find((x) => (x.id == poke.id))
           // );
         });
+        this.teamService.addPokeTeam(this.pokedb);
         this.nbpoke++;
       }
     });
   }
+  onDelete(index: number) {
+    this.pokeTeam.slice(index, 1);
+    // index = index <= 0 ? index : index - 1;
+    // this.pokemon = this.pokeTeam[index];
+    this.nbpoke--;
+    this.isdel = true;
+  }
 
   onClick(index: number) {
-    // console.log(index);
-    // console.log(this.pokeTeam);
-
-    this.pokemon = this.pokeTeam[index];
+    if (!this.isdel) {
+      this.pokemon = this.pokeTeam[index];
+      // console.log('poke', this.pokemon);
+    }
+    this.isdel = false;
   }
 }

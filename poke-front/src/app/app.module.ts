@@ -20,6 +20,7 @@ import { MenuViewComponent } from './views/menu-view/menu-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogPokeComponent } from './components/dialog-poke/dialog-poke.component';
+import { ShopViewComponent } from './views/shop-view/shop-view.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { DialogPokeComponent } from './components/dialog-poke/dialog-poke.compon
     TeamViewComponent,
     ProfilViewComponent,
     MenuViewComponent,
-    DialogPokeComponent
+    DialogPokeComponent,
+    ShopViewComponent
   ],
   imports: [
     ReactiveFormsModule,

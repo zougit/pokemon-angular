@@ -7,6 +7,7 @@ import { MenuViewComponent } from './views/menu-view/menu-view.component';
 import { PokeChoiceComponent } from './components/poke-choice/poke-choice.component';
 import { battleComponent } from './components/battle/battle.component';
 import { TeamViewComponent } from './views/team-view/team-view.component';
+import { ShopViewComponent } from './views/shop-view/shop-view.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path: 'definePlayer', component: DefinePlayerComponent},
   {path: 'pokeChoice', component: PokeChoiceComponent},
   {path: 'battle', component: battleComponent},
-  {path: 'team', component: TeamViewComponent}
+  {path: 'team', component: TeamViewComponent},
+  {path: 'shop', component: ShopViewComponent},
 ];
 
 @NgModule({

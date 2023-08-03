@@ -26,7 +26,7 @@ export const addPoke: RequestHandler = async (req, res, next) => {
   const poke = req.params.poke_id;
   const team = await teamServices.addPoke(team_id, Number(poke));
   if (team != null && team != -1 && team != 6) {
-    return res.status(200).json({ message: "Team fetched successfully", data: team }).end();
+    return res.status(200).json(team).end();
   } else if (team == -1) {
     return res.status(403).json({ message: "Already exist in this team" }).end();
   } else if (team == 6) {
