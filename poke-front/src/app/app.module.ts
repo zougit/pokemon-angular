@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogPokeComponent } from './components/dialog-poke/dialog-poke.component';
 import { ShopViewComponent } from './views/shop-view/shop-view.component';
+import { DialogDetailPokeshopComponent } from './components/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { ShopViewComponent } from './views/shop-view/shop-view.component';
     ProfilViewComponent,
     MenuViewComponent,
     DialogPokeComponent,
-    ShopViewComponent
+    ShopViewComponent,
+    DialogDetailPokeshopComponent
   ],
   imports: [
     ReactiveFormsModule,

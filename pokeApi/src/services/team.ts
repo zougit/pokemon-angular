@@ -20,7 +20,7 @@ export async function getAllTeam() {
 
 export async function getTeamById(id: string) {
   try {
-    return await Pokedb.findAll({ where: { team_id: id } });
+    return await Team.findOne({ where: { id }, include: {model: Pokedb} });
   } catch (error) {
     throw error;
   }

@@ -31,4 +31,10 @@ export class PokemonService {
   getPokeDbByUser(userId: number) {
     return this.http.get<any>(environment.apiUrl + 'pokedb/getAll/' + userId);
   }
+
+  addPokeDb(poke: any) {
+    return this.http
+      .post<any>(environment.apiUrl + 'pokedb/add', poke)
+      .subscribe((x) => console.log("add ",x));
+  }
 }

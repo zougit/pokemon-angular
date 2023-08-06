@@ -1,0 +1,26 @@
+.pokeSelector {
+  overflow-y: scroll;
+  margin: 0px 50px;
+  height: 62vh;
+  background-color: grey;
+}
+
+//   .pokeSelector::-webkit-scrollbar {
+//     width: 0px; /* width of the entire scrollbar */
+//   }
+
+.pokeCard {
+  border: solid 2px;
+  overflow: hidden;
+  width: fit-content;
+  height: fit-content;
+  // background-color: rgb(128, 128, 128);
+  background-color: rgba(128, 128, 128, 0.4);
+  &:hover {
+    border-color: blue;
+
+    p {
+      color: blue;
+    }
+  }
+}

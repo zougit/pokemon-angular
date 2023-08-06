@@ -11,7 +11,7 @@ export class TeamService {
   constructor(private http: HttpClient) {}
 
   getTeam(id: number) {
-    return this.http.get<any[]>(environment.apiUrl + 'team/getById/' + id);
+    return this.http.get<any>(environment.apiUrl + 'team/getById/' + id);
   }
 
   addPokeTeam(pokebd: any) {

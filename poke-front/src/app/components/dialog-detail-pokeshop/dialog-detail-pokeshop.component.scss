@@ -1,0 +1,30 @@
+.dialog {
+  height: 550px;
+  width: 500px;
+  top: 370.719px;
+  left: 500px;
+  margin: 3px;
+  display: flex;
+  flex-direction: column;
+  .title {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    width: 100%;
+    align-items: center;
+    background-color: grey;
+    span {
+      margin-left: 10px;
+    }
+    button {
+      margin-left: auto;
+      margin-right: 5px;
+    }
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    width: auto;
+  }
+}

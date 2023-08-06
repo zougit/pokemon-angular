@@ -1,16 +1,16 @@
 <div class="pokeSelector d-flex flex-wrap justify-content-center">
-    <div class="m-1" *ngFor="let card of pokeShop">
-        <div class="pokeCard d-flex flex-column align-items-center">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{card.poke_id}}.png"
+    <div class="m-1" *ngFor="let pokemon of pokeShop">
+        <div (click)="onClick(pokemon)" class="pokeCard d-flex flex-column align-items-center">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{pokemon.poke_id}}.png"
                 alt="">
             <p>
                 <b>
-                    {{card.name}}
+                    {{pokemon.name}}
                 </b>
-                price :{{card.price}}
+                price :{{pokemon.price}}
             </p>
             <span>
-                level: {{card.lvl}}
+                level: {{pokemon.lvl}}
             </span>
         </div>
     </div>

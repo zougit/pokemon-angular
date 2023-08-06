@@ -28,8 +28,9 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     this.teamService.getTeam(2).subscribe((v) => {
-      // console.log(v);
-      v.forEach((poke) => {
+      // console.log(v.pokemons);
+      let teamPoke : any[] = v.pokemons
+      teamPoke.forEach((poke) => {
         this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
           this.pokeTeam.push(pokemon);
           this.pokeTeam.find((x) => x.id == poke.id_poke)!.lvl = poke.lvl;
@@ -40,7 +41,6 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
           this.pokemon = this.pokeTeam[0];
         });
       });
-      // this.pokeTeam = v;
     });
     this.pokeService
       .getPokeDbByUser(1)
@@ -48,7 +48,7 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked(): void {
-    if (this.pokemon && this.pokeCard && this.pokeTeam) {
+    if (this.pokemon && this.pokeCard) {
       this.stats = [
         { name: 'hp', key: this.pokemon.hp },
         { name: 'hpMax', key: this.pokemon.hpMax },
