@@ -2,6 +2,7 @@ import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPokeComponent } from 'src/app/components/dialog-poke/dialog-poke.component';
 import { Pokemon } from 'src/app/models/Pokemon.model';
+import { User } from 'src/app/models/User.model';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { TeamService } from 'src/app/services/team/team.service';
 
@@ -13,10 +14,13 @@ import { TeamService } from 'src/app/services/team/team.service';
 export class TeamViewComponent implements OnInit, AfterContentChecked {
   nbpoke: number = 0;
   pokeCard!: any[];
+  pokeCardFilter!: any[];
   pokemon!: Pokemon;
   pokedb!: any;
   pokeTeam: Pokemon[] = [];
   stats!: any;
+  user!: User;
+  teamId!: number;
 
   isdel = false;
 
@@ -27,9 +31,13 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
   ) {}
 
   ngOnInit(): void {
-    this.teamService.getTeam(2).subscribe((v) => {
+    this.user = JSON.parse(localStorage.getItem('user')!);
+    // console.log(this.user);
+
+    this.teamService.getTeam(+this.user.id).subscribe((v) => {
       // console.log(v.pokemons);
-      let teamPoke : any[] = v.pokemons
+      this.teamId = v.id;
+      let teamPoke: any[] = v.pokemons;
       teamPoke.forEach((poke) => {
         this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
           this.pokeTeam.push(pokemon);
@@ -43,12 +51,12 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
       });
     });
     this.pokeService
-      .getPokeDbByUser(1)
+      .getPokeDbByUser(+this.user.id)
       .subscribe((poke: any) => (this.pokeCard = poke.data));
   }
 
   ngAfterContentChecked(): void {
-    if (this.pokemon && this.pokeCard) {
+    if (this.pokemon && this.pokeCard && this.pokeTeam) {
       this.stats = [
         { name: 'hp', key: this.pokemon.hp },
         { name: 'hpMax', key: this.pokemon.hpMax },
@@ -60,25 +68,25 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
         { name: 'type', key: this.pokemon.type },
         // { name: 'moves', key: this.pokemon.moves },
       ];
+      this.pokeCardFilter = this.pokeCard.filter(
+        (x) => !this.pokeTeam.find((poke) => poke.id == x.id_poke)
+      );
+      console.log("card filter ",this.pokeCardFilter);
     }
   }
 
   onAdd() {
-    this.pokeCard = this.pokeCard.filter(
-      (x) => !this.pokeTeam.find((poke) => poke.id == x.id_poke)
-    );
-
     const dialogRef = this.dialog.open(DialogPokeComponent, {
-      data: this.pokeCard,
+      data: this.pokeCardFilter,
     });
 
     // console.log('pokecard ', this.pokeCard);
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
+      // console.log('The dialog was closed', result);
       if (result) {
         this.pokedb = result;
-        this.pokedb.team_id = 2;
+        this.pokedb.team_id = this.teamId;
         this.pokeService.getPokemonById(result.id_poke).subscribe((poke) => {
           this.pokeTeam.push(poke);
           // console.log('poke ', poke);
@@ -87,21 +95,26 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
           this.pokeTeam.find((x) => x.id == poke.id)!.exp = this.pokedb.exp;
           this.pokeTeam.find((x) => x.id == poke.id)!.expMax =
             this.pokedb.expMax;
-          // console.log(
-          //   'poke find ',
-          //   this.pokeTeam.find((x) => (x.id == poke.id))
-          // );
         });
         this.teamService.addPokeTeam(this.pokedb);
         this.nbpoke++;
       }
     });
   }
-  onDelete(index: number) {
-    this.pokeTeam.slice(index, 1);
-    // index = index <= 0 ? index : index - 1;
-    // this.pokemon = this.pokeTeam[index];
-    this.nbpoke--;
+
+  onDelete(index: number, poke: Pokemon) {
+    if (this.pokeTeam.length > 1) {
+      // console.log(this.pokeTeam[index]);
+      let pokedel = {
+        id_poke: this.pokeTeam[index].id,
+        team_id: this.teamId,
+      };
+      this.pokeTeam = this.pokeTeam.filter((x) => x.id != poke.id);
+      this.teamService.delPokeTeam(pokedel);
+      index = index <= 0 ? index : index - 1;
+      this.pokemon = this.pokeTeam[index];
+      this.nbpoke--;
+    }
     this.isdel = true;
   }
 

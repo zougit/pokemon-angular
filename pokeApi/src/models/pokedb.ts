@@ -55,9 +55,10 @@ export class Pokedb extends Model<Pokedb> {
   @Column(INTEGER)
   declare user_id: number;
   
+  @AllowNull(true)
   @ForeignKey(() => Team)
   @Column(INTEGER)
-  declare team_id?: number;
+  declare team_id?: number | null;
   
   @BelongsTo(() => User)
   declare user: User;

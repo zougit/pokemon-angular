@@ -65,11 +65,11 @@ export async function login(user: User) {
     const isMatch = bcrypt.compareSync(user.password, foundUser.password);
 
     if (isMatch) {
-      const token = jwt.sign({ _id: foundUser.id?.toString(), username: foundUser.username }, SECRET_KEY, {
+      const token = jwt.sign({ id: foundUser.id?.toString(), username: foundUser.username }, SECRET_KEY, {
         expiresIn: "1 days",
       });
 
-      return { user: { _id: foundUser.id?.toString(), username: foundUser.username }, token: token };
+      return { user: foundUser, token: token };
     } else {
       throw new Error("Password is not correct");
     }

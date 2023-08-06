@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addPoke, createTeam, getAllTeam, getRandomTeam, getRandomTeamByType, getTeamById } from "../controllers/team";
+import { addPoke, createTeam, getAllTeam, getRandomTeam, getRandomTeamByType, getTeamById, delPoke } from "../controllers/team";
 
 const teamrouter = Router();
 
@@ -9,5 +9,6 @@ teamrouter.get("/getById/:id", getTeamById);
 teamrouter.get("/getRandom/", getRandomTeam);
 teamrouter.get("/getRandomByType/:type", getRandomTeamByType);
 teamrouter.put("/addpoke/:poke_id", addPoke);
+teamrouter.put("/delpoke/:poke_id", delPoke);
 
 export { teamrouter };

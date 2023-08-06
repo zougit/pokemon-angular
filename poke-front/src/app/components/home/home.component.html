@@ -1,6 +1,16 @@
-<Button style="margin-top:20vh ;border:none ;background-color: transparent;" routerLink="definePlayer">
-    <img src="./assets/go.png" alt="">
+<Button class="button" routerLink="definePlayer">
+    <p>2 players mode</p>
 </Button>
-<Button style="margin-top:20vh ;border:none ;background-color: transparent;" routerLink="menu">
+<Button class="button" routerLink="menu">
     <p>menu</p>
 </Button>
+
+<button *ngIf="!isLogged" class="button" routerLink="login">
+    <p>login</p>
+</button>
+
+<button *ngIf="isLogged" class="button" (click)="disconnect()">
+    <p>disconnect</p>
+</button>
+
+<!-- <h1 *ngIf="user"> {{user.username}} </h1> -->

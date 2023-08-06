@@ -1,5 +1,5 @@
 <div>
-    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value);">
+    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit()">
         <input type="text" name="userName" placeholder="userName" formControlName="userName" required>
         <br/>
         <input type="text" name="password" placeholder="password" formControlName="password" required>

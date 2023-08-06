@@ -1,27 +1,22 @@
-import { SessionProps } from "./Session.model";
-
 export interface UserProps {
-    _id ?: string
-    login : string
-    password : string
-    subscription: string;
-    student: boolean;
-    session?: SessionProps[] | string[]
+  id: string;
+  username: string;
+  password: string;
+  role: string;
+  money: number;
 }
 
 export class User implements UserProps {
-    _id ?: string
-    login : string
-    password : string
-    subscription: string;
-    student: boolean;
-    session?: SessionProps[] | string[]
+  id!: string;
+  username: string;
+  password: string;
+  role: string;
+  money: number;
 
-    constructor(user: UserProps){
-        this.login = user.login;
-        this.password = user.password;
-        this.student = user.student;
-        this.subscription = user.subscription;
-        this.session = user.session;
-    }
+  constructor(user: UserProps) {
+    this.username = user.username;
+    this.password = user.password;
+    this.role = user.role;
+    this.money = user.money;
+  }
 }

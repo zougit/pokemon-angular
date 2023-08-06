@@ -19,4 +19,10 @@ export class TeamService {
       .put(environment.apiUrl + 'team/addpoke/' + pokebd.id_poke, pokebd)
       .subscribe((poke) => console.log(poke));
   }
+
+  delPokeTeam(pokebd: any) {
+    return this.http
+      .put(environment.apiUrl + 'team/delpoke/' + pokebd.id_poke, pokebd)
+      .subscribe((poke) => console.log(poke));
+  }
 }

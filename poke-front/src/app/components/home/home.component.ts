@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from 'src/app/models/User.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -6,14 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  isLogged = false;
+  user!: User;
 
-  ngOnInit(): void {}
-  
-  playAudio() {
-    let audio = new Audio();
-    audio.src = '../../../assets/a.mp3';
-    audio.load();
-    audio.play();
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.isLogged = this.authService.isAuthenticated();
+    this.user = JSON.parse(localStorage.getItem('user')!);
+  }
+
+  disconnect() {
+    localStorage.setItem('token', '');
+    this.router.navigate(['login']);
   }
 }

@@ -18,11 +18,14 @@ import { TeamViewComponent } from './views/team-view/team-view.component';
 import { ProfilViewComponent } from './views/profil-view/profil-view.component';
 import { MenuViewComponent } from './views/menu-view/menu-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DialogPokeComponent } from './components/dialog-poke/dialog-poke.component';
 import { ShopViewComponent } from './views/shop-view/shop-view.component';
 import { DialogDetailPokeshopComponent } from './components/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
-
+import { AuthService } from './services/auth/auth.service';
+import { TeamService } from './services/team/team.service';
+import { ShopService } from './services/shop/shop.service';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,7 @@ import { DialogDetailPokeshopComponent } from './components/dialog-detail-pokesh
     MenuViewComponent,
     DialogPokeComponent,
     ShopViewComponent,
-    DialogDetailPokeshopComponent
+    DialogDetailPokeshopComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -50,8 +53,13 @@ import { DialogDetailPokeshopComponent } from './components/dialog-detail-pokesh
     MatDialogModule,
   ],
   providers: [
-    PokemonService
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
+    AuthService,
+    PokemonService,
+    TeamService,
+    ShopService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
