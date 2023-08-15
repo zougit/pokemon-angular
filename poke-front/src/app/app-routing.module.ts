@@ -11,7 +11,7 @@ import { ShopViewComponent } from './views/shop-view/shop-view.component';
 import { AuthGuardService as AuthGuard } from './services/auth/auth-guard.service';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent },
   { path: 'login', component: AuthComponent },
   { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
   { path: 'definePlayer', component: DefinePlayerComponent },

@@ -71,7 +71,7 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
       this.pokeCardFilter = this.pokeCard.filter(
         (x) => !this.pokeTeam.find((poke) => poke.id == x.id_poke)
       );
-      console.log("card filter ",this.pokeCardFilter);
+      // console.log("card filter ",this.pokeCardFilter);
     }
   }
 
