@@ -21,16 +21,16 @@
 
     <div class="d-flex flex-column box">
         <div class="poke" *ngFor="let poke of [].constructor(nbpoke); let i=index">
-            <div *ngIf="pokeTeam[i]" (click)="onClick(i)" class="d-flex flex-row ">
+            <div *ngIf="pokeTeam.pokemons[i]" (click)="onClick(i)" class="d-flex flex-row align-items-center">
                 <div>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{pokeTeam[i].id}}.png"
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{pokeTeam.pokemons[i].id}}.png"
                         alt="">
                 </div>
                 <div class="d-flex flex-column justify-content-center">
-                    <span>name: {{pokeTeam[i].name}} </span>
-                    <span>lvl: {{pokeTeam[i].lvl}}</span>
+                    <span>name: {{pokeTeam.pokemons[i].name}} </span>
+                    <span>lvl: {{pokeTeam.pokemons[i].lvl}}</span>
                 </div>
-                <button class="btn btn-light btnadd" (click)="onDelete(i,pokeTeam[i])">
+                <button class="btn btn-light btnadd" (click)="onDelete(i,pokeTeam.pokemons[i])">
                     -
                 </button>
             </div>

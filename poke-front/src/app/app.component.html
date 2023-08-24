@@ -1,5 +1,23 @@
-<h1 class="m-5"><img src="./assets/pokemonBattleArenaTitle.png" alt="" width="500" height="50"></h1>
-<div  class="d-flex flex-column align-items-center">
+<div class="d-flex flex-row align-items-center justify-content-end">
+  <h1 class="m-5"><img src="./assets/pokemonBattleArenaTitle.png" alt="" width="500" height="50"></h1>
+
+  <div>
+    <button *ngIf="!isLogged" class="button" routerLink="auth/login">
+      <p>login</p>
+    </button>
+
+    <button *ngIf="!isLogged" class="button" routerLink="auth/signup">
+      <p>signup</p>
+    </button>
+
+    <button *ngIf="isLogged" class="btn btn-secondary button " (click)="disconnect()">
+      <p>disconnect</p>
+    </button>
+  </div>  
+</div>
+
+
+<div class="d-flex flex-column align-items-center">
   <router-outlet></router-outlet>
   <button class="mt-5 btnHome menuButton" routerLink="">HOME</button>
 </div>

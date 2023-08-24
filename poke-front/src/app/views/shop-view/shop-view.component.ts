@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDetailPokeshopComponent } from 'src/app/components/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
-import { Pokemon } from 'src/app/models/Pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon.model';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { ShopService } from 'src/app/services/shop/shop.service';
 

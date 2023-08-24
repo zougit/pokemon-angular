@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/User.model';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
 
   disconnect() {
     localStorage.setItem('token', '');
+    localStorage.setItem('user', '');
     this.router.navigate(['login']);
   }
 }

@@ -12,7 +12,7 @@ import {
 import { filter, isEmpty, map, takeWhile, toArray } from 'rxjs/operators';
 import { BattleInfoProps } from '../../models/battleLog.model';
 import { Move } from '../../models/move.model';
-import { Pokemon } from '../../models/Pokemon.model';
+import { Pokemon } from '../../models/pokemon.model';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { Itype, TypesService } from '../tabTypes.service';
 

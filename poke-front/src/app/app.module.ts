@@ -26,6 +26,7 @@ import { AuthService } from './services/auth/auth.service';
 import { TeamService } from './services/team/team.service';
 import { ShopService } from './services/shop/shop.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { AuthViewComponent } from './views/auth-view/auth-view.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
     DialogPokeComponent,
     ShopViewComponent,
     DialogDetailPokeshopComponent,
+    AuthViewComponent,
   ],
   imports: [
     ReactiveFormsModule,

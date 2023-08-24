@@ -1,5 +1,12 @@
 .btnHome{
-  position: fixed;
+  position: relative;
   bottom: 55px;
   font-weight: bold;
+}
+
+.button {
+  // margin-top: 20vh;
+  border: none;
+  // background-color: transparent;
+  height: 30px;
 }

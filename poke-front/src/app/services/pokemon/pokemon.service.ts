@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Pokemon, PokemonProps } from '../../models/Pokemon.model';
+import { Pokemon, PokemonProps } from '../../models/pokemon.model';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';

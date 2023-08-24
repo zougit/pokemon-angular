@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Pokemon } from 'src/app/models/Pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 
 import { Observable } from 'rxjs';

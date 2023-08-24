@@ -9,17 +9,19 @@ import { battleComponent } from './components/battle/battle.component';
 import { TeamViewComponent } from './views/team-view/team-view.component';
 import { ShopViewComponent } from './views/shop-view/shop-view.component';
 import { AuthGuardService as AuthGuard } from './services/auth/auth-guard.service';
+import { AuthViewComponent } from './views/auth-view/auth-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: AuthComponent },
-  { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
+  { path: 'auth/login', component: AuthViewComponent },
+  { path: 'auth/signup', component: AuthViewComponent },
   { path: 'definePlayer', component: DefinePlayerComponent },
   { path: 'pokeChoice', component: PokeChoiceComponent },
   { path: 'battle', component: battleComponent },
+  { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
   { path: 'team', component: TeamViewComponent, canActivate: [AuthGuard] },
   { path: 'shop', component: ShopViewComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

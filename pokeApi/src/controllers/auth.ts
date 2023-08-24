@@ -7,7 +7,7 @@ export const loginOne = async (req: Request, res: Response) => {
    const foundUser = await userServices.login(req.body);
    res.status(200).send(foundUser);
  } catch (error) {
-   return res.status(500).send(getErrorMessage(error));
+   return res.status(301).send(getErrorMessage(error));
  }
 };
 
@@ -16,7 +16,7 @@ export const registerOne = async (req: Request, res: Response) => {
    await userServices.register(req.body);
    res.status(201).send('Inserted successfully');
  } catch (error) {
-   return res.status(500).send(getErrorMessage(error));
+   return res.status(301).send(getErrorMessage(error));
  }
 };
 

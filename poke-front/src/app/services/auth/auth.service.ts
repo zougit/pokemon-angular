@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User, UserProps } from '../../models/User.model';
+import { User, UserProps } from '../../models/user.model';
 import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -28,9 +28,10 @@ export class AuthService {
   }
 
   public createUser(userInfo: User): Observable<User> {
-    return this.http.post<User>(environment.apiUrl + 'auth/subscribe', {
+    return this.http.post<User>(environment.apiUrl + 'auth/register', {
         "username": userInfo.username,
         "password": userInfo.password,
+        "role": userInfo.role
       })
       .pipe(catchError(this.handleError));
   }
