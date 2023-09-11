@@ -15,6 +15,7 @@ import { Move } from '../../models/move.model';
 import { Pokemon } from '../../models/pokemon.model';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { Itype, TypesService } from '../tabTypes.service';
+import { User } from 'src/app/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class BattleService {
   currentpokemons!: number[];
   public toggler = true;
   public move!: Move | null;
+  user!: User;
 
   constructor(
     private pokemonService: PokemonService,
@@ -55,9 +57,38 @@ export class BattleService {
     return forkJoin(observables).pipe(
       map((pokeGroups: Pokemon[][]) => {
         pokeGroups.forEach((pokeGroup: Pokemon[]) => {
-          const updatedGroup: Pokemon[] = pokeGroup.map((pokemon: Pokemon) => {
-            return new Pokemon(pokemon);
-          });
+          const updatedGroup: Pokemon[] = pokeGroup.map(
+            (pokemon: Pokemon, index) => {
+              let poke = new Pokemon(pokemon);
+              poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+
+              let stats = {
+                hp: poke.hp,
+                hpMax: poke.hpMax,
+                atk: poke.atk,
+                def: poke.def,
+                spAtk: poke.spAtk,
+                spDef: poke.spDef,
+                speed: poke.speed,
+              };
+
+              for (const key in stats) {
+                if (Object.prototype.hasOwnProperty.call(poke, key)) {
+                  if (key == 'hp' || key == 'hpMax') {
+                    poke[key as keyof typeof stats] = Math.floor(
+                      stats[key as keyof typeof stats] * poke.lvl
+                    );
+                  } else {
+                    poke[key as keyof typeof stats] = Math.floor(
+                      stats[key as keyof typeof stats] *
+                        (poke.lvl * (poke.lvl / 1000))
+                    );
+                  }
+                }
+              }
+              return poke;
+            }
+          );
           this.pokemons.push(updatedGroup);
         });
         return this.pokemons;

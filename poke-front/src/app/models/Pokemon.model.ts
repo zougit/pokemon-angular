@@ -14,7 +14,7 @@ export interface PokemonProps {
   speed: number;
   type: string;
   moves: Move[];
-  evo :string;
+  evolution :string;
   tier: number;
   id: number;
 }
@@ -33,7 +33,7 @@ export class Pokemon implements PokemonProps {
   speed: number;
   type: string;
   moves: Move[];
-  evo :string;
+  evolution :string;
   tier: number;
   id: number;
 
@@ -50,7 +50,7 @@ export class Pokemon implements PokemonProps {
     this.spDef = pokemon.spDef;
     this.speed = pokemon.speed;
     this.type = pokemon.type;
-    this.evo = pokemon.evo;
+    this.evolution = pokemon.evolution;
     this.tier = pokemon.tier;
     this.id = pokemon.id;
 
