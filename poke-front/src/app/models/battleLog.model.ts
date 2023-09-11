@@ -7,6 +7,6 @@ export interface LogProps{
 }
 
 export interface BattleInfoProps{
-  pokemons: Pokemon[];
+  pokemons: Pokemon[][];
   log: LogProps;
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 
 import { Observable } from 'rxjs';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { BattleInfoProps, LogProps } from 'src/app/models/battleLog.model';
 import { Move } from 'src/app/models/move.model';
 
@@ -19,13 +19,10 @@ export class battleComponent implements OnInit {
   pokemonsId!: number[][];
   logs = new Array<LogProps>();
   currentTime: number[] = [];
+  cp: number[] = [0, 2];
   toggler = false;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private battleService: BattleService
-  ) {}
+  constructor(private router: Router, private battleService: BattleService) {}
 
   ngOnInit(): void {
     this.toggler = false;
@@ -44,57 +41,29 @@ export class battleComponent implements OnInit {
       localStorage.setItem('pokeId', JSON.stringify(pokemonsId));
       console.log('ids : ', pokemonsId);
     });
-
+    this.battleService.currentpokemons = [0, 2];
     this.battleService
-      .addtest(this.pokemonsId)
+      .addPokemons(this.pokemonsId)
       .pipe(
         mergeMap((pokemons: Pokemon[][]): Observable<BattleInfoProps> => {
           this.pokemons = pokemons;
           console.log('poke component ', this.pokemons);
-
-          this.battleService.pokemonsSub.next(pokemons);
-
-          this.battleService.pokemonsSub.complete()
 
           return this.battleService.battle();
         })
       )
       .subscribe({
         next: (response) => {
-          let currentTeam = this.pokemons[0] == response.pokemons ? 0 : 1;
           this.currentTime.push(Date.now());
-          this.pokemons[currentTeam] = response.pokemons;
+          this.pokemons = response.pokemons;
           this.logs.push(response.log);
+          console.log('response', response.log);
+          this.cp = this.battleService.currentpokemons;
         },
         error: (error) => {
           console.log(error);
         },
       });
-    // .subscribe((pokemons) => console.log('add : ', pokemons));
-
-    // this.route.queryParams
-    //   .pipe(
-    //     mergeMap((params, i) => {
-    //       return this.battleService.addPokemons(params['pokemonPlayer']);
-    //     }),
-    //     mergeMap((pokemons: Pokemon[], i): Observable<BattleInfoProps> => {
-    //       this.pokemons[i] = pokemons;
-    //       console.log('poke component ', this.pokemons);
-
-    //       return this.battleService.battle();
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (response) => {
-    //       let currentTeam = this.pokemons[0] == response.pokemons ? 0 : 1;
-    //       this.currentTime.push(Date.now());
-    //       this.pokemons[currentTeam] = response.pokemons;
-    //       this.logs.push(response.log);
-    //     },
-    //     error: (error) => {
-    //       console.log(error);
-    //     },
-    //   });
   }
 
   toggle() {
@@ -105,7 +74,7 @@ export class battleComponent implements OnInit {
   atkMove(move: Move) {
     this.battleService.move = move;
     this.battleService.toggler = !this.battleService.toggler;
-    this.toggler = !this.toggler;
+    this.toggler = this.battleService.toggler;
 
     console.log(move);
   }

@@ -7,8 +7,8 @@
 
   <div class="d-flex flex-row">
     <div class="pokeBattle d-flex flex-column justify-content-start" *ngIf="pokemons[0] || pokemons[1]">
-      <app-pokemon [player]="players[1]" [pokemon]="this.pokemons[1][0]" [pokeNb]="this.pokemons[1].length" [isFront]="true"></app-pokemon>
-      <app-pokemon [player]="players[0]" [pokemon]="this.pokemons[0][0]" [pokeNb]="this.pokemons[0].length" [isFront]="false"></app-pokemon>
+      <app-pokemon [player]="players[1]" [pokemon]="this.pokemons[1][cp[1]]" [pokeNb]="this.pokemons[1].length" [isFront]="true"></app-pokemon>
+      <app-pokemon [player]="players[0]" [pokemon]="this.pokemons[0][cp[0]]" [pokeNb]="this.pokemons[0].length" [isFront]="false"></app-pokemon>
     </div>
 
     <div class="logBox">
