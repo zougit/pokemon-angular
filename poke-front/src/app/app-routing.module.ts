@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
   { path: 'team', component: TeamViewComponent, canActivate: [AuthGuard] },
   { path: 'shop', component: ShopViewComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'auth/login' },
 ];
 
 @NgModule({

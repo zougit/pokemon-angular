@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DialogDetailPokeshopComponent } from './dialog-detail-pokeshop.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 describe('DialogDetailPokeshopComponent', () => {
   let component: DialogDetailPokeshopComponent;
@@ -8,7 +15,20 @@ describe('DialogDetailPokeshopComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DialogDetailPokeshopComponent]
+      imports: [
+        HttpClientTestingModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        NgbModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+      ],
+      declarations: [DialogDetailPokeshopComponent],
+      providers: [
+        {provide: MatDialogRef, useValue: {}},
+        {provide: MAT_DIALOG_DATA, useValue: []},
+    ]
     });
     fixture = TestBed.createComponent(DialogDetailPokeshopComponent);
     component = fixture.componentInstance;

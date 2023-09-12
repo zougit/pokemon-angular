@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthComponent } from './auth.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from 'src/app/app-routing.module';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
@@ -8,9 +14,19 @@ describe('AuthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthComponent ]
-    })
-    .compileComponents();
+      imports: [
+        HttpClientTestingModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        AppRoutingModule,
+      ],
+      providers: [
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        JwtHelperService,
+        AuthService,
+      ],
+      declarations: [AuthComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

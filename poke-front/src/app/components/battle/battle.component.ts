@@ -39,31 +39,35 @@ export class battleComponent implements OnInit {
     this.battleService.pokemonsIdSub.subscribe((pokemonsId) => {
       this.pokemonsId = pokemonsId;
       localStorage.setItem('pokeId', JSON.stringify(pokemonsId));
-      console.log('ids : ', pokemonsId);
+      // console.log('ids : ', pokemonsId);
     });
-    this.battleService.currentpokemons = [0, 2];
-    this.battleService
-      .addPokemons(this.pokemonsId)
-      .pipe(
-        mergeMap((pokemons: Pokemon[][]): Observable<BattleInfoProps> => {
-          this.pokemons = pokemons;
-          console.log('poke component ', this.pokemons);
+    this.battleService.currpoke = [0, 0];
 
-          return this.battleService.battle();
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          this.currentTime.push(Date.now());
-          this.pokemons = response.pokemons;
-          this.logs.push(response.log);
-          console.log('response', response.log);
-          this.cp = this.battleService.currentpokemons;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+    if (this.pokemonsId) {
+      this.battleService
+        .addPokemons(this.pokemonsId)
+        .pipe(
+          mergeMap((pokemons: Pokemon[][]): Observable<BattleInfoProps> => {
+            this.pokemons = pokemons;
+            console.log('poke component ', this.pokemons);
+
+            return this.battleService.battle();
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.currentTime.push(Date.now());
+            this.pokemons = response.pokemons;
+            this.logs.push(response.log);
+            console.log('response', response.log);
+            console.log('log', this.logs);
+            this.cp = this.battleService.currpoke;
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+    }
   }
 
   toggle() {

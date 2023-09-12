@@ -9,7 +9,7 @@ import {
   pipe,
   ReplaySubject,
 } from 'rxjs';
-import { filter, isEmpty, map, takeWhile, toArray } from 'rxjs/operators';
+import { filter, isEmpty, map, take, takeWhile, toArray } from 'rxjs/operators';
 import { BattleInfoProps } from '../../models/battleLog.model';
 import { Move } from '../../models/move.model';
 import { Pokemon } from '../../models/pokemon.model';
@@ -26,10 +26,11 @@ export class BattleService {
   pokemons: Pokemon[][] = [];
   pokemonsTest: Pokemon[][] = [];
   pokemonsIdSub: ReplaySubject<number[][]>;
-  currentpokemons!: number[];
+  currpoke!: number[];
   public toggler = true;
   public move!: Move | null;
   user!: User;
+  page !: string;
 
   constructor(
     private pokemonService: PokemonService,
@@ -59,6 +60,8 @@ export class BattleService {
         pokeGroups.forEach((pokeGroup: Pokemon[]) => {
           const updatedGroup: Pokemon[] = pokeGroup.map(
             (pokemon: Pokemon, index) => {
+              console.log('pokemon ', pokemon);
+
               let poke = new Pokemon(pokemon);
               poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
 
@@ -109,15 +112,6 @@ export class BattleService {
       filter(() => this.toggler === true),
       takeWhile(() => isover === false),
       map((): BattleInfoProps => {
-        console.log(
-          'poke fight atk',
-          this.pokemons[attacker][this.currentpokemons[attacker]]
-        );
-        console.log(
-          'poke fight def',
-          this.pokemons[defender][this.currentpokemons[defender]]
-        );
-
         let log = '';
         let move = null;
         if (this.move) {
@@ -125,43 +119,46 @@ export class BattleService {
           console.log('service move : ', move);
         } else {
           move =
-            this.pokemons[attacker][
-              this.currentpokemons[attacker]
-            ].choseRandomMove();
+            this.pokemons[attacker][this.currpoke[attacker]].choseRandomMove();
           console.log('service random move : ', move);
           this.toggler = false;
         }
 
         const damage = this.calculDamage(attacker, defender, move!);
 
-        log =
-          this.pokemons[attacker][this.currentpokemons[attacker]].name +
-          ' attack ' +
-          this.pokemons[defender][this.currentpokemons[defender]].name +
-          ' with ' +
-          move!.name +
-          '. ' +
-          this.pokemons[defender][this.currentpokemons[defender]].name +
-          ' lose ' +
-          damage +
-          'hp.';
-
         let def =
-          Itype.get(
-            this.pokemons[defender][this.currentpokemons[defender]].type
-          ) ?? 0;
+          Itype.get(this.pokemons[defender][this.currpoke[defender]].type) ?? 0;
         let atk = Itype.get(move!.type) ?? 0;
 
-        if (this.typesService.multi[atk - 1][def - 1] === 2 && damage != 0) {
-          log += "\n THAT'S SUPER EFFECTIVE";
-        }
+        if (damage || this.typesService.multi[atk - 1][def - 1] === 0) {
+          log =
+            this.pokemons[attacker][this.currpoke[attacker]].name +
+            ' attack ' +
+            this.pokemons[defender][this.currpoke[defender]].name +
+            ' with ' +
+            move!.name +
+            '. ' +
+            this.pokemons[defender][this.currpoke[defender]].name +
+            ' lose ' +
+            damage +
+            'hp.';
 
-        if (this.typesService.multi[atk - 1][def - 1] === 0.5 && damage != 0) {
-          log += '\n NOT VERY EFFECTIVE';
-        }
+          if (this.typesService.multi[atk - 1][def - 1] === 2) {
+            log += "\n THAT'S SUPER EFFECTIVE";
+          }
 
-        if (this.typesService.multi[atk - 1][def - 1] === 0) {
-          log += '\n NO EFFECT';
+          if (this.typesService.multi[atk - 1][def - 1] === 0.5) {
+            log += '\n NOT VERY EFFECTIVE';
+          }
+
+          if (this.typesService.multi[atk - 1][def - 1] === 0) {
+            log += '\n NO EFFECT';
+          }
+        } else {
+          log =
+            this.pokemons[attacker][this.currpoke[attacker]].name +
+            ' use ' +
+            move!.name;
         }
 
         attacker = attacker === 1 ? 0 : 1;
@@ -182,13 +179,17 @@ export class BattleService {
 
         if (winner !== -1) {
           const loser = winner === 0 ? 1 : 0;
-          let log =
-            this.pokemons[loser][this.currentpokemons[loser]].name + ' is KO.';
+          let log = this.pokemons[loser][this.currpoke[loser]].name + ' is KO.';
 
-          this.currentpokemons[loser] =
-            this.currentpokemons[loser] < this.pokemons[loser].length
-              ? this.currentpokemons[loser] + 1
-              : this.currentpokemons[loser];
+          this.currpoke[loser] =
+            this.currpoke[loser] < this.pokemons[loser].length
+              ? this.currpoke[loser] + 1
+              : this.currpoke[loser];
+
+          if (this.user && winner == 0) {
+            this.lvling();
+            this.user.money += 50 * (this.moyenneLvl() / 10);
+          }
 
           return {
             pokemons: this.pokemons,
@@ -203,14 +204,53 @@ export class BattleService {
     );
   }
 
+  moyenneLvl() {
+    return (
+      this.pokemons[1].reduce(
+        (accumulator, currentValue) => accumulator + currentValue.lvl,
+        0
+      ) / this.pokemons[1].length
+    );
+  }
+
+  lvling() {
+    if (
+      this.pokemons[0][this.currpoke[0]].exp !== undefined &&
+      this.pokemons[0][this.currpoke[0]].exp >=
+        this.pokemons[0][this.currpoke[0]].expMax
+    ) {
+      this.pokemons[0][this.currpoke[0]].exp = 0;
+      this.pokemons[0][this.currpoke[0]].expMax += 10;
+      this.pokemons[0][this.currpoke[0]].lvl++;
+      if (
+        (this.pokemons[0][this.currpoke[0]].lvl == 16 &&
+          this.pokemons[0][this.currpoke[0]].tier == 1) ||
+        (this.pokemons[0][this.currpoke[0]].lvl == 45 &&
+          this.pokemons[0][this.currpoke[0]].tier == 2)
+      ) {
+        let pokename = this.pokemons[0][this.currpoke[0]].evolution;
+        this.pokemonService
+          .getPokemon(pokename)
+          .pipe(take(1))
+          .subscribe((pokeEvo) => {
+            let poke = new Pokemon(pokeEvo);
+            poke.exp = this.pokemons[0][this.currpoke[0]].exp;
+            poke.expMax = this.pokemons[0][this.currpoke[0]].expMax;
+            poke.lvl = this.pokemons[0][this.currpoke[0]].lvl;
+            this.pokemons[0][this.currpoke[0]] = poke;
+          });
+      }
+    }
+  }
+
   whoWin(): number {
-    if (this.pokemons[0][this.currentpokemons[0]].hp <= 0) {
-      this.pokemons[0][this.currentpokemons[0]].hp = 0;
+    if (this.pokemons[0][this.currpoke[0]].hp <= 0) {
+      // this.pokemons[0][this.currpoke[0]].hp = 0;
       return 1;
     }
 
-    if (this.pokemons[1][this.currentpokemons[1]].hp <= 0) {
-      this.pokemons[1][this.currentpokemons[1]].hp = 0;
+    if (this.pokemons[1][this.currpoke[1]].hp <= 0) {
+      // this.pokemons[1][this.currpoke[1]].hp = 0;
       return 0;
     }
 
@@ -242,32 +282,31 @@ export class BattleService {
 
     let atk = Itype.get(move.type) ?? 0;
     let def =
-      Itype.get(this.pokemons[defender][this.currentpokemons[defender]].type) ??
-      0;
+      Itype.get(this.pokemons[defender][this.currpoke[defender]].type) ?? 0;
     if (move.power !== null) {
       damage = Math.floor(
         move.power *
           0.005 *
-          this.pokemons[attacker][this.currentpokemons[attacker]].atk *
+          this.pokemons[attacker][this.currpoke[attacker]].atk *
           0.01 *
-          this.pokemons[defender][this.currentpokemons[defender]].def *
+          this.pokemons[defender][this.currpoke[defender]].def *
           this.typesService.multi[atk - 1][def - 1]
       );
       damage = damage < 0 ? 0 : damage;
     }
 
-    this.pokemons[defender][this.currentpokemons[defender]].hp -= damage;
+    this.pokemons[defender][this.currpoke[defender]].hp -= damage;
 
     return damage;
   }
 
   whoIsMoreSpeed(random = Math.random): number {
     if (
-      this.pokemons[0][this.currentpokemons[0]].speed !==
-      this.pokemons[1][this.currentpokemons[1]].speed
+      this.pokemons[0][this.currpoke[0]].speed !==
+      this.pokemons[1][this.currpoke[1]].speed
     ) {
-      return this.pokemons[0][this.currentpokemons[0]].speed >
-        this.pokemons[1][this.currentpokemons[1]].speed
+      return this.pokemons[0][this.currpoke[0]].speed >
+        this.pokemons[1][this.currpoke[1]].speed
         ? 0
         : 1;
     } else {

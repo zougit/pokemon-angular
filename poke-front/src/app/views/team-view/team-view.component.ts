@@ -35,30 +35,31 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('user')!);
     console.log(this.user);
-
-    this.pokeTeam.id = this.user.teams[0].id;
-    this.teamService.getTeam(+this.user.id).subscribe((v) => {
-      // console.log(v.pokemons);
-      let teamPoke: any[] = v.pokemons;
-      teamPoke.forEach((poke) => {
-        this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
-        this.pokeTeam.pokemons.push(pokemon);
-        this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.lvl =
-          poke.lvl;
-        this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.exp =
-          poke.exp;
-        this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.expMax =
-          poke.expMax;
-        // console.log(this.pokeTeam.pokemons);
-        this.nbpoke = this.pokeTeam.pokemons.length;
-        this.pokemon = this.pokeTeam.pokemons[0];
+    if (this.user) {
+      this.pokeTeam.id = this.user.teams[0].id;
+      this.teamService.getTeam(+this.user.id).subscribe((v) => {
+        // console.log(v.pokemons);
+        let teamPoke: any[] = v.pokemons;
+        teamPoke.forEach((poke) => {
+          this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
+            this.pokeTeam.pokemons.push(pokemon);
+            this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.lvl =
+              poke.lvl;
+            this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.exp =
+              poke.exp;
+            this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.expMax =
+              poke.expMax;
+            // console.log(this.pokeTeam.pokemons);
+            this.nbpoke = this.pokeTeam.pokemons.length;
+            this.pokemon = this.pokeTeam.pokemons[0];
+          });
+        });
       });
-    });
-    });
 
-    this.pokeService
-      .getPokeDbByUser(+this.user.id)
-      .subscribe((poke: any) => (this.pokeCard = poke.data));
+      this.pokeService
+        .getPokeDbByUser(+this.user.id)
+        .subscribe((poke: any) => (this.pokeCard = poke.data));
+    }
   }
 
   ngAfterContentChecked(): void {
@@ -92,7 +93,6 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
       // console.log('The dialog was closed', result);
       if (result) {
         this.pokedb = result;
-        
 
         this.pokedb.team_id = this.pokeTeam.id;
         this.pokeService.getPokemonById(result.id_poke).subscribe((poke) => {
