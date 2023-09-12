@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Pokemon, PokemonProps } from '../../models/pokemon.model';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Pokemon } from '../../models/pokemon.model';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PokeCardProps } from '../../models/pokeCard.model';
 
@@ -10,10 +9,10 @@ import { PokeCardProps } from '../../models/pokeCard.model';
   providedIn: 'root',
 })
 export class PokemonService {
-  constructor(@Inject(HttpClient) private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  getPokemon(name: string): Observable<PokemonProps> {
-    return this.http.get<PokemonProps>(
+  getPokemon(name: string): Observable<Pokemon> {
+    return this.http.get<Pokemon>(
       environment.apiUrl + 'poke/getPoke/' + name
     );
   }

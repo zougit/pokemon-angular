@@ -9,31 +9,34 @@ import {
   pipe,
   ReplaySubject,
 } from 'rxjs';
-import { filter, isEmpty, map, takeWhile, toArray } from 'rxjs/operators';
+import { filter, isEmpty, map, take, takeWhile, toArray } from 'rxjs/operators';
 import { BattleInfoProps } from '../../models/battleLog.model';
 import { Move } from '../../models/move.model';
 import { Pokemon } from '../../models/pokemon.model';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { Itype, TypesService } from '../tabTypes.service';
+import { User } from 'src/app/models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BattleService {
   static player = new Array<string>(2);
-  pokemons: Pokemon[] = [];
+  // pokemons: Pokemon[] = [];
+  pokemons: Pokemon[][] = [];
   pokemonsTest: Pokemon[][] = [];
   pokemonsIdSub: ReplaySubject<number[][]>;
-  pokemonsSub: AsyncSubject<Pokemon[][]>;
+  currpoke!: number[];
   public toggler = true;
   public move!: Move | null;
+  user!: User;
+  page !: string;
 
   constructor(
     private pokemonService: PokemonService,
     private typesService: TypesService
   ) {
     this.pokemonsIdSub = new ReplaySubject<number[][]>();
-    this.pokemonsSub = new AsyncSubject<Pokemon[][]>();
   }
 
   addPlayers(names: string[]): void {
@@ -41,157 +44,121 @@ export class BattleService {
     BattleService.player[1] = names[1];
   }
 
-  addPokemons(pokemons: Array<number>): Observable<Pokemon[]> {
-    return forkJoin(
-      pokemons.map((pokemon: number): Observable<Pokemon> => {
-        return this.pokemonService.getPokemonById(pokemon);
-      })
-    ).pipe(
-      map((poke: Pokemon[]): Pokemon[] => {
-        poke.forEach((pokemon: Pokemon, index: number): void => {
-          this.pokemons[index] = new Pokemon(pokemon);
+  addPokemons(pokeIds: number[][]): Observable<Pokemon[][]> {
+    const observables: Observable<Pokemon[]>[] = pokeIds.map(
+      (group: number[]) => {
+        return forkJoin(
+          group.map((pokemonId: number) => {
+            return this.pokemonService.getPokemonById(pokemonId);
+          })
+        );
+      }
+    );
+
+    return forkJoin(observables).pipe(
+      map((pokeGroups: Pokemon[][]) => {
+        pokeGroups.forEach((pokeGroup: Pokemon[]) => {
+          const updatedGroup: Pokemon[] = pokeGroup.map(
+            (pokemon: Pokemon, index) => {
+              console.log('pokemon ', pokemon);
+
+              let poke = new Pokemon(pokemon);
+              poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+
+              let stats = {
+                hp: poke.hp,
+                hpMax: poke.hpMax,
+                atk: poke.atk,
+                def: poke.def,
+                spAtk: poke.spAtk,
+                spDef: poke.spDef,
+                speed: poke.speed,
+              };
+
+              for (const key in stats) {
+                if (Object.prototype.hasOwnProperty.call(poke, key)) {
+                  if (key == 'hp' || key == 'hpMax') {
+                    poke[key as keyof typeof stats] = Math.floor(
+                      stats[key as keyof typeof stats] * poke.lvl
+                    );
+                  } else {
+                    poke[key as keyof typeof stats] = Math.floor(
+                      stats[key as keyof typeof stats] *
+                        (poke.lvl * (poke.lvl / 1000))
+                    );
+                  }
+                }
+              }
+              return poke;
+            }
+          );
+          this.pokemons.push(updatedGroup);
         });
         return this.pokemons;
       })
     );
   }
 
-  // addtest2(pokemons: number[][]) {
-  //   // console.log('ids : ', pokemons);
-
-  //   pokemons
-  //     .map((pokemons: number[]): Observable<Pokemon>[] => {
-  //       // console.log('pokemons ids : ', pokemons);
-  //       return pokemons.map((pokemon: number): Observable<Pokemon> => {
-  //         // console.log('id : ', pokemon);
-  //         return this.pokemonService.getPokemonById(pokemon);
-  //       });
-  //     })
-  //     .forEach((pokemons,i) => {
-  //       // console.log(pokemons);
-  //       this.pokemons[i] = []
-  //       pokemons.forEach((pokemon, index) => {
-  //         pokemon.subscribe((poke) => {
-  //           // console.log(poke);
-  //           this.pokemons[i].push(new Pokemon(poke));
-  //         });
-  //       });
-  //     });
-
-  //   console.log('poke service ', this.pokemons[0].length);
-
-  //   return this.pokemons;
-  // }
-
-  addtest(pokeIds: number[][]): Observable<Pokemon[][]> {
-    // console.log('ids : ', pokeIds);
-    // let pokemons = [];
-    // pokemons.push(pokeIds[0].split(','));
-    // pokemons.push(pokeIds[1].split(','));
-    // console.log(pokemons);
-
-    let pokemonsObs = pokeIds.map(
-      (pokemons: number[]): Observable<Pokemon>[] => {
-        // console.log('id : ', pokemon);
-        return pokemons.map((pokemon: number): Observable<Pokemon> => {
-          // console.log('id : ', +pokemon);
-          return this.pokemonService.getPokemonById(+pokemon);
-        });
-      }
-    );
-
-    // return map(() => forkJoin(pokemonsObs)).pipe(
-    //   map((poke: Observable<Pokemon>[][]): Pokemon[][] => {
-    //     // console.log('poke service', poke);
-
-    //     poke.forEach((pokemons, i) => {
-    //       console.log(i);
-    //       this.pokemonsTest[i] = [];
-    //       pokemons.forEach(
-    //         (poke, index) => (this.pokemonsTest[i][index] = new Pokemon(poke))
-    //       );
-    //       return this.pokemonsTest;
-    //     });
-    //   })
-    // );
-
-    return this.test(pokemonsObs);
-  }
-
-  test(pokemonsObs: Observable<Pokemon>[][]): Observable<Pokemon[][]> {
-    return of(pokemonsObs).pipe(
-      map((poke: Observable<Pokemon>[][]): Pokemon[][] => {
-        // console.log('poke service', poke);
-
-        poke.forEach((pokemons, i) => {
-          console.log(i);
-          this.pokemonsTest[i] = [];
-          pokemons.forEach((pokeSub, index) => {
-            pokeSub.subscribe((poke) => {
-              this.pokemonsTest[i][index] = new Pokemon(poke);
-            });
-          });
-        });
-        return this.pokemonsTest;
-      })
-    );
-  }
-
   battle(): Observable<BattleInfoProps> {
-    // this.pokemonsSub
-    // .asObservable()
-    // .subscribe((poke) => console.log('sub poke ', poke));
+    console.log(this.pokemons);
 
     let attacker = this.whoIsMoreSpeed();
     // let attacker = 1;
     let defender = attacker === 1 ? 0 : 1;
     let isover = false;
-    const fight = interval(1000);
     this.toggler = attacker === 0 ? false : true;
+    const fight = interval(1000);
     return fight.pipe(
       filter(() => this.toggler === true),
       takeWhile(() => isover === false),
       map((): BattleInfoProps => {
-        console.log('poke fight ', this.pokemonsSub);
-
         let log = '';
         let move = null;
         if (this.move) {
           move = this.move;
           console.log('service move : ', move);
         } else {
-          move = this.pokemons[attacker].choseRandomMove();
+          move =
+            this.pokemons[attacker][this.currpoke[attacker]].choseRandomMove();
           console.log('service random move : ', move);
           this.toggler = false;
         }
 
         const damage = this.calculDamage(attacker, defender, move!);
 
-        log =
-          this.pokemons[attacker].name +
-          ' attack ' +
-          this.pokemons[defender].name +
-          ' with ' +
-          move!.name +
-          '. ' +
-          this.pokemons[defender].name +
-          ' lose ' +
-          damage +
-          'hp.';
-
-        let def = Itype.get(this.pokemons[defender].type) ?? 0;
+        let def =
+          Itype.get(this.pokemons[defender][this.currpoke[defender]].type) ?? 0;
         let atk = Itype.get(move!.type) ?? 0;
 
-        if (this.typesService.multi[atk - 1][def - 1] === 2 && damage != 0) {
-          log += "\n THAT'S SUPER EFFECTIVE";
-        }
+        if (damage || this.typesService.multi[atk - 1][def - 1] === 0) {
+          log =
+            this.pokemons[attacker][this.currpoke[attacker]].name +
+            ' attack ' +
+            this.pokemons[defender][this.currpoke[defender]].name +
+            ' with ' +
+            move!.name +
+            '. ' +
+            this.pokemons[defender][this.currpoke[defender]].name +
+            ' lose ' +
+            damage +
+            'hp.';
 
-        if (this.typesService.multi[atk - 1][def - 1] === 0.5 && damage != 0) {
-          log += '\n NOT VERY EFFECTIVE';
-        }
+          if (this.typesService.multi[atk - 1][def - 1] === 2) {
+            log += "\n THAT'S SUPER EFFECTIVE";
+          }
 
-        if (this.typesService.multi[atk - 1][def - 1] === 0) {
-          log += '\n NO EFFECT';
+          if (this.typesService.multi[atk - 1][def - 1] === 0.5) {
+            log += '\n NOT VERY EFFECTIVE';
+          }
+
+          if (this.typesService.multi[atk - 1][def - 1] === 0) {
+            log += '\n NO EFFECT';
+          }
+        } else {
+          log =
+            this.pokemons[attacker][this.currpoke[attacker]].name +
+            ' use ' +
+            move!.name;
         }
 
         attacker = attacker === 1 ? 0 : 1;
@@ -208,29 +175,102 @@ export class BattleService {
       }),
       map((battleLog: BattleInfoProps): BattleInfoProps => {
         const winner = this.whoWin();
+        const winnerTeam = this.whichTeamWin();
 
         if (winner !== -1) {
           const loser = winner === 0 ? 1 : 0;
-          let log = this.pokemons[loser].name + ' is KO.';
-          isover = true;
+          let log = this.pokemons[loser][this.currpoke[loser]].name + ' is KO.';
+
+          this.currpoke[loser] =
+            this.currpoke[loser] < this.pokemons[loser].length
+              ? this.currpoke[loser] + 1
+              : this.currpoke[loser];
+
+          if (this.user && winner == 0) {
+            this.lvling();
+            this.user.money += 50 * (this.moyenneLvl() / 10);
+          }
+
           return {
             pokemons: this.pokemons,
             log: { text: log, color: 2, winner },
           };
+        }
+        if (winnerTeam !== -1) {
+          isover = true;
         }
         return battleLog;
       })
     );
   }
 
+  moyenneLvl() {
+    return (
+      this.pokemons[1].reduce(
+        (accumulator, currentValue) => accumulator + currentValue.lvl,
+        0
+      ) / this.pokemons[1].length
+    );
+  }
+
+  lvling() {
+    if (
+      this.pokemons[0][this.currpoke[0]].exp !== undefined &&
+      this.pokemons[0][this.currpoke[0]].exp >=
+        this.pokemons[0][this.currpoke[0]].expMax
+    ) {
+      this.pokemons[0][this.currpoke[0]].exp = 0;
+      this.pokemons[0][this.currpoke[0]].expMax += 10;
+      this.pokemons[0][this.currpoke[0]].lvl++;
+      if (
+        (this.pokemons[0][this.currpoke[0]].lvl == 16 &&
+          this.pokemons[0][this.currpoke[0]].tier == 1) ||
+        (this.pokemons[0][this.currpoke[0]].lvl == 45 &&
+          this.pokemons[0][this.currpoke[0]].tier == 2)
+      ) {
+        let pokename = this.pokemons[0][this.currpoke[0]].evolution;
+        this.pokemonService
+          .getPokemon(pokename)
+          .pipe(take(1))
+          .subscribe((pokeEvo) => {
+            let poke = new Pokemon(pokeEvo);
+            poke.exp = this.pokemons[0][this.currpoke[0]].exp;
+            poke.expMax = this.pokemons[0][this.currpoke[0]].expMax;
+            poke.lvl = this.pokemons[0][this.currpoke[0]].lvl;
+            this.pokemons[0][this.currpoke[0]] = poke;
+          });
+      }
+    }
+  }
+
   whoWin(): number {
-    if (this.pokemons[0].hp <= 0) {
-      this.pokemons[0].hp = 0;
+    if (this.pokemons[0][this.currpoke[0]].hp <= 0) {
+      // this.pokemons[0][this.currpoke[0]].hp = 0;
       return 1;
     }
 
-    if (this.pokemons[1].hp <= 0) {
-      this.pokemons[1].hp = 0;
+    if (this.pokemons[1][this.currpoke[1]].hp <= 0) {
+      // this.pokemons[1][this.currpoke[1]].hp = 0;
+      return 0;
+    }
+
+    return -1;
+  }
+
+  whichTeamWin(): number {
+    if (
+      this.pokemons[0].every((pokemon: Pokemon) => {
+        return pokemon.hp <= 0;
+      })
+    ) {
+      return 1;
+    }
+
+    if (
+      this.pokemons[1].every((pokemon: Pokemon) => {
+        return pokemon.hp <= 0;
+      })
+    ) {
       return 0;
     }
 
@@ -241,39 +281,42 @@ export class BattleService {
     let damage = 0;
 
     let atk = Itype.get(move.type) ?? 0;
-    let def = Itype.get(this.pokemons[defender].type) ?? 0;
+    let def =
+      Itype.get(this.pokemons[defender][this.currpoke[defender]].type) ?? 0;
     if (move.power !== null) {
       damage = Math.floor(
         move.power *
           0.005 *
-          this.pokemons[attacker].atk *
+          this.pokemons[attacker][this.currpoke[attacker]].atk *
           0.01 *
-          this.pokemons[defender].def *
+          this.pokemons[defender][this.currpoke[defender]].def *
           this.typesService.multi[atk - 1][def - 1]
       );
       damage = damage < 0 ? 0 : damage;
     }
 
-    this.pokemons[defender].hp -= damage;
+    this.pokemons[defender][this.currpoke[defender]].hp -= damage;
 
     return damage;
   }
 
   whoIsMoreSpeed(random = Math.random): number {
-    // return +this.pokemonsSub.asObservable().subscribe((poke) => {
-    //   console.log("poke speed",poke[0][0]);
-      
-    //   if (poke[0][0].speed !== poke[1][0].speed) {
-    //     return poke[0][0].speed > poke[1][0].speed ? 0 : 1;
-    //   } else {
-    //     return random() < 0.5 ? 0 : 1;
-    //   }
-    // });
-    
-    if (this.pokemons[0].speed !== this.pokemons[1].speed) {
-      return this.pokemons[0].speed > this.pokemons[1].speed ? 0 : 1;
+    if (
+      this.pokemons[0][this.currpoke[0]].speed !==
+      this.pokemons[1][this.currpoke[1]].speed
+    ) {
+      return this.pokemons[0][this.currpoke[0]].speed >
+        this.pokemons[1][this.currpoke[1]].speed
+        ? 0
+        : 1;
     } else {
       return random() < 0.5 ? 0 : 1;
     }
+
+    // if (this.pokemons[0].speed !== this.pokemons[1].speed) {
+    //   return this.pokemons[0].speed > this.pokemons[1].speed ? 0 : 1;
+    // } else {
+    //   return random() < 0.5 ? 0 : 1;
+    // }
   }
 }
