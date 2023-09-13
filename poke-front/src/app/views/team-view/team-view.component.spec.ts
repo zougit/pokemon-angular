@@ -7,7 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('TeamViewComponent', () => {
   let component: TeamViewComponent;
@@ -19,7 +19,7 @@ describe('TeamViewComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
+        RouterTestingModule,
         NgbModule,
         BrowserAnimationsModule,
         MatDialogModule,

@@ -1,5 +1,5 @@
 import { Move } from './move.model';
-import { Pokemon } from './pokemon.model';
+import { Pokemon } from './Pokemon.model';
 
 const pokemonDefault = new Pokemon ({
     name: 'default',

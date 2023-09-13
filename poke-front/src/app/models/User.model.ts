@@ -1,4 +1,4 @@
-import { Pokemon } from "./pokemon.model";
+import { Pokemon } from "./Pokemon.model";
 import { Team } from "./team.model";
 
 export interface UserProps {

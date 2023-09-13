@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/Pokemon.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class battleComponent implements OnInit {
   pokemonsId!: number[][];
   logs = new Array<LogProps>();
   currentTime: number[] = [];
-  cp: number[] = [0, 2];
+  cp: number[] = [0, 0];
   toggler = false;
 
   constructor(private router: Router, private battleService: BattleService) {}
@@ -41,7 +41,7 @@ export class battleComponent implements OnInit {
       localStorage.setItem('pokeId', JSON.stringify(pokemonsId));
       // console.log('ids : ', pokemonsId);
     });
-    this.battleService.currpoke = [0, 0];
+    this.battleService.currpoke = this.cp;
 
     if (this.pokemonsId) {
       this.battleService
@@ -49,7 +49,7 @@ export class battleComponent implements OnInit {
         .pipe(
           mergeMap((pokemons: Pokemon[][]): Observable<BattleInfoProps> => {
             this.pokemons = pokemons;
-            console.log('poke component ', this.pokemons);
+            // console.log('poke component ', this.pokemons);
 
             return this.battleService.battle();
           })

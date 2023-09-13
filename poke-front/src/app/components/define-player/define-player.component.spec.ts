@@ -4,7 +4,7 @@ import { DefinePlayerComponent } from './define-player.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DefinePlayerComponent', () => {
   let component: DefinePlayerComponent;
@@ -16,7 +16,7 @@ describe('DefinePlayerComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
+        RouterTestingModule,
       ],
       declarations: [DefinePlayerComponent],
       teardown: { destroyAfterEach: false },

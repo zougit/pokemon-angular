@@ -4,7 +4,7 @@ import { ShopViewComponent } from './shop-view.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,7 +19,7 @@ describe('ShopViewComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
+        RouterTestingModule,
         NgbModule,
         BrowserAnimationsModule,
         MatDialogModule,

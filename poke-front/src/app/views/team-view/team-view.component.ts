@@ -1,7 +1,7 @@
 import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPokeComponent } from 'src/app/components/dialog-poke/dialog-poke.component';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/Pokemon.model';
 import { Team } from 'src/app/models/team.model';
 import { User } from 'src/app/models/user.model';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';

@@ -1,4 +1,4 @@
-import { Pokemon } from './pokemon.model';
+import { Pokemon } from './Pokemon.model';
 
 export interface LogProps{
   text: string;

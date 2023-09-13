@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DialogDetailPokeshopComponent', () => {
   let component: DialogDetailPokeshopComponent;
@@ -19,7 +19,7 @@ describe('DialogDetailPokeshopComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
+        RouterTestingModule,
         NgbModule,
         BrowserAnimationsModule,
         MatDialogModule,

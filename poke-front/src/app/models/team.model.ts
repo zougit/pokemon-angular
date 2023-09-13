@@ -1,4 +1,4 @@
-import { Pokemon } from './pokemon.model';
+import { Pokemon } from './Pokemon.model';
 
 export class Team {
   id!: string;

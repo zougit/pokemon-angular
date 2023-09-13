@@ -1,15 +1,15 @@
 export interface MoveProps{
   name: string;
-  accuracy: number;
-  power: number;
+  accuracy: number | null;
+  power: number | null;
   pp: number;
   type: string
 }
 
 export class Move implements MoveProps{
   name: string;
-  accuracy: number;
-  power: number;
+  accuracy: number | null;
+  power: number | null;
   pp: number;
   type: string
 

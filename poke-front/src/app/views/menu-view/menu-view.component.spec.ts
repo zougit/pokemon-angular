@@ -4,7 +4,7 @@ import { MenuViewComponent } from './menu-view.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('MenuViewComponent', () => {
   let component: MenuViewComponent;
@@ -16,7 +16,7 @@ describe('MenuViewComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
+        RouterTestingModule,
       ],
       declarations: [MenuViewComponent]
     });
