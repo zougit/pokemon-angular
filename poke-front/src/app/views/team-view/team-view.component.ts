@@ -138,25 +138,25 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
     this.isdel = false;
   }
 
-  getTeamUser(user: User) {
-    this.teamService.getTeam(+this.user.id).subscribe((v) => {
-      // console.log(v.pokemons);
-      this.pokeTeam.id = v.id;
-      let teamPoke: any[] = v.pokemons;
-      teamPoke.forEach((poke) => {
-        this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
-          this.pokeTeam.pokemons.push(pokemon);
-          this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.lvl =
-            poke.lvl;
-          this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.exp =
-            poke.exp;
-          this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.expMax =
-            poke.expMax;
-          // console.log(this.pokeTeam.pokemons);
-          this.nbpoke = this.pokeTeam.pokemons.length;
-          this.pokemon = this.pokeTeam.pokemons[0];
-        });
-      });
-    });
-  }
+  // getTeamUser(user: User) {
+  //   this.teamService.getTeam(+this.user.id).subscribe((v) => {
+  //     // console.log(v.pokemons);
+  //     this.pokeTeam.id = v.id;
+  //     let teamPoke: any[] = v.pokemons;
+  //     teamPoke.forEach((poke) => {
+  //       this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
+  //         this.pokeTeam.pokemons.push(pokemon);
+  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.lvl =
+  //           poke.lvl;
+  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.exp =
+  //           poke.exp;
+  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.expMax =
+  //           poke.expMax;
+  //         // console.log(this.pokeTeam.pokemons);
+  //         this.nbpoke = this.pokeTeam.pokemons.length;
+  //         this.pokemon = this.pokeTeam.pokemons[0];
+  //       });
+  //     });
+  //   });
+  // }
 }

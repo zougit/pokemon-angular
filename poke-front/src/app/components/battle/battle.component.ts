@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Pokemon } from 'src/app/models/Pokemon.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
@@ -13,7 +13,7 @@ import { Move } from 'src/app/models/move.model';
   templateUrl: './battle.component.html',
   styleUrls: ['./battle.component.scss'],
 })
-export class battleComponent implements OnInit {
+export class battleComponent implements OnInit, OnDestroy {
   players: Array<string> = [];
   pokemons: Pokemon[][] = [[], []];
   pokemonsId!: number[][];
@@ -85,5 +85,9 @@ export class battleComponent implements OnInit {
 
   lastPage(): void {
     this.router.navigate(['pokeChoice']);
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('pokeId');
   }
 }

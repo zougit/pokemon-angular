@@ -43,10 +43,6 @@ export class AuthService {
     })
     .pipe(catchError(this.handleError));
   }
-  
-  public getUserFrom() {
-    return this.http.get<UserProps>(environment.apiUrl + 'auth/'+ "630c947b4365ce8d7fd86d08") ;
-  }
 
   public updateUser(user: User): Observable<User> {
     return this.http.put<User>(environment.apiUrl + 'auth/'+ user.id, {

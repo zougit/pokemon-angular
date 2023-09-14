@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { DialogDetailPokeshopComponent } from 'src/app/components/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
 import { Pokemon } from 'src/app/models/Pokemon.model';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
@@ -33,7 +34,7 @@ export class ShopViewComponent implements OnInit {
       data: poke,
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: Observable<{}>) => {
       console.log('The dialog was closed', result);
     });
   }
