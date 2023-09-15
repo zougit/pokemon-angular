@@ -14,7 +14,6 @@ import { AuthService } from '../auth/auth.service';
 })
 export class BattleService {
   static player = new Array<string>(2);
-  // pokemons: Pokemon[] = [];
   pokemons: Pokemon[][] = [];
   pokemonsIdSub: ReplaySubject<number[][]>;
   currpoke!: number[];
@@ -39,7 +38,7 @@ export class BattleService {
   }
 
   addPokemons(pokeIds: number[][]): Observable<Pokemon[][]> {
-    this.pokemons = []
+    this.pokemons = [];
 
     const observables: Observable<Pokemon[]>[] = pokeIds.map(
       (group: number[]) => {
@@ -53,15 +52,17 @@ export class BattleService {
 
     return forkJoin(observables).pipe(
       map((pokeGroups: Pokemon[][]) => {
-        pokeGroups.forEach((pokeGroup: Pokemon[]) => {
+        pokeGroups.forEach((pokeGroup: Pokemon[], index) => {
           const updatedGroup: Pokemon[] = pokeGroup.map(
             (pokemon: Pokemon, index) => {
-              console.log('pokemon ', pokemon);
+              // console.log('pokemon ', pokemon);
 
               let poke = new Pokemon(pokemon);
-              poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
-              poke.exp = this.user ? this.user.pokemons[index].exp : 0;
-              poke.expMax = this.user ? this.user.pokemons[index].expMax : 0;
+              if (this.user && index == 0 && this.page == 'arena') {
+                poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+                poke.exp = this.user ? this.user.pokemons[index].exp : 0;
+                poke.expMax = this.user ? this.user.pokemons[index].expMax : 0;
+              }
 
               let stats = {
                 hp: poke.hp,
@@ -87,12 +88,14 @@ export class BattleService {
                   }
                 }
               }
+              console.log(poke);
+
               return poke;
             }
           );
           this.pokemons.push(updatedGroup);
         });
-        
+
         return this.pokemons;
       })
     );
@@ -123,13 +126,16 @@ export class BattleService {
           this.toggler = false;
         }
 
-        const damage = this.calculDamage(attacker, defender, move!);
+        let damage;
+        if (move.power) {
+          damage = this.calculDamage(attacker, defender, move!);
+        }
 
         let def =
           Itype.get(this.pokemons[defender][this.currpoke[defender]].type) ?? 0;
         let atk = Itype.get(move!.type) ?? 0;
 
-        if (damage || this.typesService.multi[atk - 1][def - 1] === 0) {
+        if (damage || damage == 0) {
           log =
             this.pokemons[attacker][this.currpoke[attacker]].name +
             ' attack ' +
