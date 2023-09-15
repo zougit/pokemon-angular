@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {expect} from '@jest/globals';
+
 import { DialogDetailPokeshopComponent } from './dialog-detail-pokeshop.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';

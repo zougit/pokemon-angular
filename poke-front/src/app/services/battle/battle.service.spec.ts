@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
+import {expect} from '@jest/globals';
+
 import { BattleService } from './battle.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, of } from 'rxjs';

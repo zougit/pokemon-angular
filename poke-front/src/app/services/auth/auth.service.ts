@@ -45,10 +45,7 @@ export class AuthService {
   }
 
   public updateUser(user: User): Observable<User> {
-    return this.http.put<User>(environment.apiUrl + 'auth/'+ user.id, {
-      "username": user.username,
-      "password": user.password,
-    } )
+    return this.http.put<User>(environment.apiUrl + 'user/update/'+ user.id, user )
       .pipe(
         catchError(this.handleError)
       );

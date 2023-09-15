@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 
+import {expect} from '@jest/globals';
+
 import { PokeChoiceComponent } from './poke-choice.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';

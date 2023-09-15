@@ -4,7 +4,7 @@
       <div class="m-1" *ngFor="let card of pokeCards">
         <div
           class="pokeCard d-flex flex-column align-items-center"
-          [ngClass]="pokemonPlayer[0][0] === card.id ? 'pokeCardSelected' : ''"
+          [ngClass]="{ pokeCardSelected: isCardSelected(0, card.id) }"
           (click)="selectPoke(0, card.id)"
         >
           <img

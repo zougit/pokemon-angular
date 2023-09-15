@@ -36,4 +36,10 @@ export class PokemonService {
       .post<any>(environment.apiUrl + 'pokedb/add', poke)
       .subscribe((x) => console.log("add ",x));
   }
+
+  updatePokeDb(poke: any,userId : string) {
+    return this.http
+      .put<any>(environment.apiUrl + 'pokedb/update/'+ poke.id+ userId,poke)
+  }
+
 }

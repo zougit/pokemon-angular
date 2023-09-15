@@ -36,6 +36,7 @@ export class Pokemon implements PokemonProps {
   evolution :string;
   tier: number;
   id: number;
+  id_poke: any;
 
   constructor(pokemon: PokemonProps) {
     this.name = pokemon.name;

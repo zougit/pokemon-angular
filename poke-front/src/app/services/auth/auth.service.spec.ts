@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
+import {expect} from '@jest/globals';
+
 import { AuthService } from './auth.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';

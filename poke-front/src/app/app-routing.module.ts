@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
   { path: 'team', component: TeamViewComponent, canActivate: [AuthGuard] },
   { path: 'shop', component: ShopViewComponent, canActivate: [AuthGuard] },
+  { path: 'arena', component: battleComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'auth/login' },
 ];
 

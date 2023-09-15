@@ -1,21 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  AsyncSubject,
-  forkJoin,
-  from,
-  interval,
-  Observable,
-  of,
-  pipe,
-  ReplaySubject,
-} from 'rxjs';
-import { filter, isEmpty, map, take, takeWhile, toArray } from 'rxjs/operators';
+import { forkJoin, interval, Observable, ReplaySubject } from 'rxjs';
+import { filter, map, take, takeWhile } from 'rxjs/operators';
 import { BattleInfoProps } from '../../models/battleLog.model';
 import { Move } from '../../models/move.model';
 import { Pokemon } from '../../models/Pokemon.model';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { Itype, TypesService } from '../tabTypes.service';
 import { User } from 'src/app/models/user.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,19 +16,21 @@ export class BattleService {
   static player = new Array<string>(2);
   // pokemons: Pokemon[] = [];
   pokemons: Pokemon[][] = [];
-  pokemonsTest: Pokemon[][] = [];
   pokemonsIdSub: ReplaySubject<number[][]>;
   currpoke!: number[];
   public toggler = true;
   public move!: Move | null;
   user!: User;
-  page !: string;
+  page!: string;
 
   constructor(
     private pokemonService: PokemonService,
-    private typesService: TypesService
+    private typesService: TypesService,
+    private authService: AuthService
   ) {
     this.pokemonsIdSub = new ReplaySubject<number[][]>();
+    this.user = JSON.parse(localStorage.getItem('user')!) ?? null;
+    console.log('user', this.user);
   }
 
   addPlayers(names: string[]): void {
@@ -45,6 +39,8 @@ export class BattleService {
   }
 
   addPokemons(pokeIds: number[][]): Observable<Pokemon[][]> {
+    this.pokemons = []
+
     const observables: Observable<Pokemon[]>[] = pokeIds.map(
       (group: number[]) => {
         return forkJoin(
@@ -64,6 +60,8 @@ export class BattleService {
 
               let poke = new Pokemon(pokemon);
               poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+              poke.exp = this.user ? this.user.pokemons[index].exp : 0;
+              poke.expMax = this.user ? this.user.pokemons[index].expMax : 0;
 
               let stats = {
                 hp: poke.hp,
@@ -94,6 +92,7 @@ export class BattleService {
           );
           this.pokemons.push(updatedGroup);
         });
+        
         return this.pokemons;
       })
     );
@@ -186,9 +185,10 @@ export class BattleService {
               ? this.currpoke[loser] + 1
               : this.currpoke[loser];
 
-          if (this.user && winner == 0) {
+          if (this.user && winner == 0 && this.page == 'arena') {
+            this.pokemons[winner][this.currpoke[winner]].exp +=
+              5 * this.pokemons[loser][this.currpoke[loser]].lvl;
             this.lvling();
-            this.user.money += 50 * (this.moyenneLvl() / 10);
           }
 
           return {
@@ -198,6 +198,22 @@ export class BattleService {
         }
         if (winnerTeam !== -1) {
           isover = true;
+          if (this.user && winnerTeam == 0 && this.page == 'arena') {
+            this.user.money += 50 * (this.moyenneLvl() / 10);
+            this.authService.updateUser(this.user); //TODO - tester ça
+            this.user.teams[0].pokemons = this.user.teams[0].pokemons.map(
+              (x, i) => {
+                x.name = this.pokemons[0][i].name;
+                x.exp = this.pokemons[0][i].exp;
+                x.expMax = this.pokemons[0][i].expMax;
+                x.lvl = this.pokemons[0][i].lvl;
+
+                this.pokemonService.updatePokeDb(x, this.user.id);
+                return x;
+              }
+            );
+            localStorage.setItem('user', JSON.stringify(this.user));
+          }
         }
         return battleLog;
       })

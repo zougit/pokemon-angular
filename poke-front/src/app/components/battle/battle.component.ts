@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { NavigationEnd, Router } from '@angular/router';
+
 import { Pokemon } from 'src/app/models/Pokemon.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 
@@ -22,9 +24,15 @@ export class battleComponent implements OnInit, OnDestroy {
   cp: number[] = [0, 0];
   toggler = false;
 
-  constructor(private router: Router, private battleService: BattleService) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+    private battleService: BattleService
+  ) {}
 
   ngOnInit(): void {
+    this.battleService.page = this.location.path().slice(1);
+
     this.toggler = false;
     this.players = BattleService.player;
 
@@ -32,15 +40,15 @@ export class battleComponent implements OnInit, OnDestroy {
       this.players = ['Player 1', 'Player 2'];
     }
 
+    this.battleService.pokemonsIdSub.subscribe((pokemonsId) => {
+      this.pokemonsId = pokemonsId;
+      localStorage.setItem('pokeId', JSON.stringify(pokemonsId));
+    });
+
     this.battleService.pokemonsIdSub.next(
       JSON.parse(localStorage.getItem('pokeId')!)
     );
 
-    this.battleService.pokemonsIdSub.subscribe((pokemonsId) => {
-      this.pokemonsId = pokemonsId;
-      localStorage.setItem('pokeId', JSON.stringify(pokemonsId));
-      // console.log('ids : ', pokemonsId);
-    });
     this.battleService.currpoke = this.cp;
 
     if (this.pokemonsId) {
