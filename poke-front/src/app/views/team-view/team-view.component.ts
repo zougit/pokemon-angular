@@ -1,6 +1,6 @@
 import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogPokeComponent } from 'src/app/components/dialog-poke/dialog-poke.component';
+import { DialogPokeComponent } from 'src/app/components/dialog/dialog-poke/dialog-poke.component';
 import { Pokemon } from 'src/app/models/Pokemon.model';
 import { Team } from 'src/app/models/team.model';
 import { User } from 'src/app/models/user.model';
@@ -56,9 +56,16 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
         });
       });
 
-      this.pokeService
-        .getPokeDbByUser(+this.user.id)
-        .subscribe((poke: any) => (this.pokeCard = poke.data));
+      if (this.user.role === 'admin') {
+        this.pokeService
+          .getAll()
+          .subscribe((poke: any) => (this.pokeCard = poke.data));
+      } else {
+        this.pokeService
+          .getPokeDbByUser(+this.user.id)
+          .subscribe((poke: any) => (this.pokeCard = poke.data));
+      }
+      
     }
   }
 
@@ -138,25 +145,4 @@ export class TeamViewComponent implements OnInit, AfterContentChecked {
     this.isdel = false;
   }
 
-  // getTeamUser(user: User) {
-  //   this.teamService.getTeam(+this.user.id).subscribe((v) => {
-  //     // console.log(v.pokemons);
-  //     this.pokeTeam.id = v.id;
-  //     let teamPoke: any[] = v.pokemons;
-  //     teamPoke.forEach((poke) => {
-  //       this.pokeService.getPokemonById(poke.id_poke).subscribe((pokemon) => {
-  //         this.pokeTeam.pokemons.push(pokemon);
-  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.lvl =
-  //           poke.lvl;
-  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.exp =
-  //           poke.exp;
-  //         this.pokeTeam.pokemons.find((x) => x.id == poke.id_poke)!.expMax =
-  //           poke.expMax;
-  //         // console.log(this.pokeTeam.pokemons);
-  //         this.nbpoke = this.pokeTeam.pokemons.length;
-  //         this.pokemon = this.pokeTeam.pokemons[0];
-  //       });
-  //     });
-  //   });
-  // }
 }

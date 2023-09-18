@@ -7,7 +7,7 @@ import { Pokemon } from '../../models/Pokemon.model';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { Itype, TypesService } from '../tabTypes.service';
 import { User } from 'src/app/models/user.model';
-import { AuthService } from '../auth/auth.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class BattleService {
   constructor(
     private pokemonService: PokemonService,
     private typesService: TypesService,
-    private authService: AuthService
+    private userService: UserService
   ) {
     this.pokemonsIdSub = new ReplaySubject<number[][]>();
     this.user = JSON.parse(localStorage.getItem('user')!) ?? null;
@@ -206,7 +206,7 @@ export class BattleService {
           isover = true;
           if (this.user && winnerTeam == 0 && this.page == 'arena') {
             this.user.money += 50 * (this.moyenneLvl() / 10);
-            this.authService.updateUser(this.user); //TODO - tester ça
+            this.userService.updateUser(this.user); //TODO - tester ça
             this.user.teams[0].pokemons = this.user.teams[0].pokemons.map(
               (x, i) => {
                 x.name = this.pokemons[0][i].name;

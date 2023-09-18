@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthComponent } from './components/auth/auth.component';
+import { NgModule, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterModule, Routes } from '@angular/router';
 import { DefinePlayerComponent } from './components/define-player/define-player.component';
 import { HomeComponent } from './components/home/home.component';
 import { MenuViewComponent } from './views/menu-view/menu-view.component';
@@ -8,8 +7,9 @@ import { PokeChoiceComponent } from './components/poke-choice/poke-choice.compon
 import { battleComponent } from './components/battle/battle.component';
 import { TeamViewComponent } from './views/team-view/team-view.component';
 import { ShopViewComponent } from './views/shop-view/shop-view.component';
-import { AuthGuardService as AuthGuard } from './services/auth/auth-guard.service';
 import { AuthViewComponent } from './views/auth-view/auth-view.component';
+import { AdminViewComponent } from './views/admin-view/admin-view.component';
+import { authGuard } from './services/auth/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,10 +18,32 @@ const routes: Routes = [
   { path: 'definePlayer', component: DefinePlayerComponent },
   { path: 'pokeChoice', component: PokeChoiceComponent },
   { path: 'battle', component: battleComponent },
-  { path: 'menu', component: MenuViewComponent, canActivate: [AuthGuard] },
-  { path: 'team', component: TeamViewComponent, canActivate: [AuthGuard] },
-  { path: 'shop', component: ShopViewComponent, canActivate: [AuthGuard] },
-  { path: 'arena', component: battleComponent, canActivate: [AuthGuard] },
+  {
+    path: 'menu',
+    component: MenuViewComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'team',
+    component: TeamViewComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'shop',
+    component: ShopViewComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'arena',
+    component: battleComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    component: AdminViewComponent,
+    canActivate: [authGuard],
+    data: {path: 'admin'}
+  },
   { path: '**', redirectTo: 'auth/login' },
 ];
 

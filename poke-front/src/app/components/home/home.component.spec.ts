@@ -9,6 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { User } from 'src/app/models/user.model';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;

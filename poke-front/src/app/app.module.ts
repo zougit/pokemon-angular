@@ -19,14 +19,16 @@ import { ProfilViewComponent } from './views/profil-view/profil-view.component';
 import { MenuViewComponent } from './views/menu-view/menu-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DialogPokeComponent } from './components/dialog-poke/dialog-poke.component';
+import { DialogPokeComponent } from './components/dialog/dialog-poke/dialog-poke.component';
 import { ShopViewComponent } from './views/shop-view/shop-view.component';
-import { DialogDetailPokeshopComponent } from './components/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
+import { DialogDetailPokeshopComponent } from './components/dialog/dialog-detail-pokeshop/dialog-detail-pokeshop.component';
 import { AuthService } from './services/auth/auth.service';
 import { TeamService } from './services/team/team.service';
 import { ShopService } from './services/shop/shop.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AuthViewComponent } from './views/auth-view/auth-view.component';
+import { AdminViewComponent } from './views/admin-view/admin-view.component';
+import { DialogUserDetailComponent } from './components/dialog/dialog-user-detail/dialog-user-detail.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { AuthViewComponent } from './views/auth-view/auth-view.component';
     ShopViewComponent,
     DialogDetailPokeshopComponent,
     AuthViewComponent,
+    AdminViewComponent,
+    DialogUserDetailComponent,
   ],
   imports: [
     ReactiveFormsModule,

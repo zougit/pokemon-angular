@@ -44,12 +44,7 @@ export class AuthService {
     .pipe(catchError(this.handleError));
   }
 
-  public updateUser(user: User): Observable<User> {
-    return this.http.put<User>(environment.apiUrl + 'user/update/'+ user.id, user )
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+
 
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('token');

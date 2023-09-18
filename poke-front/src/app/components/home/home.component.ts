@@ -20,8 +20,8 @@ export class HomeComponent implements OnInit {
   }
 
   disconnect() {
-    localStorage.setItem('token', '');
-    localStorage.setItem('user', '');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigate(['login']);
   }
 }

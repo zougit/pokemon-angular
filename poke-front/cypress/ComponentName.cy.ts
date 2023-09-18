@@ -26,6 +26,5 @@ describe('Tests Cypress pour la page Pokemon', () => {
     cy.get('.poke').should('have.length', 5); // Vérifie que l'équipe a maintenant 5 membres
   });
 
-  // Ajoutez plus de tests selon vos besoins...
 });
 

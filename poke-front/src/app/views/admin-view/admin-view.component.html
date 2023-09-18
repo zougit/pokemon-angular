@@ -1,0 +1,26 @@
+<div class="table-responsive-lg">
+    <table *ngIf="users" class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>username</th>
+                <th>money</th>
+                <th>pokemons</th>
+                <th>team</th>
+                <th>details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users; index as i">
+                <td>{{user.username}}</td>
+                <td>{{user.money}}</td>
+                <td>
+                    <ul>
+                        <li *ngFor="let poke of user.pokemons">{{poke.name}}</li>
+                    </ul>
+                </td>
+                <td>{{user.teams[0].name}}</td>
+                <td (click)="onClick(users[i])">+</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
