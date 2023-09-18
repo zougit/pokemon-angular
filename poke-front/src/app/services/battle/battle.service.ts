@@ -54,12 +54,12 @@ export class BattleService {
       map((pokeGroups: Pokemon[][]) => {
         pokeGroups.forEach((pokeGroup: Pokemon[], index) => {
           const updatedGroup: Pokemon[] = pokeGroup.map(
-            (pokemon: Pokemon, index) => {
-              // console.log('pokemon ', pokemon);
+            (pokemon: Pokemon) => {
+              console.log('pokemon ', pokemon);
 
               let poke = new Pokemon(pokemon);
-              if (this.user && index == 0 && this.page == 'arena') {
-                poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+              poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
+              if (this.user && this.page == 'arena') {
                 poke.exp = this.user ? this.user.pokemons[index].exp : 0;
                 poke.expMax = this.user ? this.user.pokemons[index].expMax : 0;
               }
@@ -74,6 +74,9 @@ export class BattleService {
                 speed: poke.speed,
               };
 
+              // console.log("stat",stats);
+              
+//FIXME - stats foireuses
               for (const key in stats) {
                 if (Object.prototype.hasOwnProperty.call(poke, key)) {
                   if (key == 'hp' || key == 'hpMax') {
@@ -85,10 +88,15 @@ export class BattleService {
                       stats[key as keyof typeof stats] *
                         (poke.lvl * (poke.lvl / 1000))
                     );
+                    console.log("stat for",Math.floor(
+                      stats[key as keyof typeof stats] *
+                        (poke.lvl * (poke.lvl / 1000))
+                    ));
+                    
                   }
                 }
               }
-              console.log(poke);
+              console.log("poke stat",poke);
 
               return poke;
             }
