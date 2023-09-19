@@ -1,8 +1,6 @@
 .dialog {
   height: 500px;
   width: 500px;
-  top: 370.719px;
-  left: 500px;
   margin: 3px;
   display: flex;
   flex-direction: column;
@@ -26,5 +24,37 @@
     margin: 10px;
     width: auto;
     color: white;
+  }
+}
+
+
+@media (min-width: 0px) and (max-width: 945px) {
+  .dialog {
+    height: 300px;
+    width: 300px;
+    margin: 3px;
+    display: flex;
+    flex-direction: column;
+  
+    .title {
+      display: flex;
+      flex-direction: row;
+      height: 30px;
+      width: 100%;
+      align-items: center;
+      background-color: grey;
+      span {
+        margin-left: 10px;
+      }
+      button {
+        margin-left: auto;
+        margin-right: 5px;
+      }
+    }
+    .content {
+      margin: 10px;
+      width: auto;
+      color: white;
+    }
   }
 }

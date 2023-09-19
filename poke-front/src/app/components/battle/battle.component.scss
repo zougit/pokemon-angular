@@ -105,7 +105,7 @@
   .logBox {
     background-color: #3d3d3d;
     width: 350px;
-    height: 100px;
+    height: 78px;
 
     border: solid 5px black;
     border-radius: 0px 10px 10px 0px;
@@ -137,8 +137,10 @@
   .actionBox {
     display: flex;
 
+    flex-direction: column;
+
     background-color: #3d3d3d;
-    width: 600px;
+    width: 350px;
     height: auto;
 
     border: solid 5px black;

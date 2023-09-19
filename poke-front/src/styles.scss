@@ -1,19 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
-body{
+body {
   display: flex;
   justify-content: center;
   font-family: sans-serif;
-  background-image: url('./assets/Pokemon-forest-by-BlazingIfrit-Fur-Affinity-dot-net.jpg');
-  height: 100vh;
+  background-image: url("./assets/Pokemon-forest-by-BlazingIfrit-Fur-Affinity-dot-net.jpg");
+  // height: auto;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   overflow-y: hidden;
-  //max-height: 721px;
+  overflow-x: hidden;
+  // max-height: 721px;
 }
 
 h1 {
@@ -22,7 +23,7 @@ h1 {
   justify-content: center;
 }
 
-.hpCard{
+.hpCard {
   background-color: #fff;
   border: solid;
   width: 250px !important;
@@ -31,12 +32,12 @@ h1 {
   border-radius: 5px;
 }
 
-.pokeName{
+.pokeName {
   font-weight: bold;
   margin-bottom: 0px;
 }
 
-.hpLabel{
+.hpLabel {
   font-size: 10px;
   font-weight: bold;
   color: goldenrod;
@@ -45,12 +46,12 @@ h1 {
   border-radius: 5px;
 }
 
-.hpInfo{
+.hpInfo {
   font-size: 15px;
   font-weight: bold;
 }
 
-.pokeBattle{
+.pokeBattle {
   width: 400px * 1.5;
   height: 238px * 1.5;
   background-repeat: no-repeat;
@@ -64,7 +65,7 @@ h1 {
   z-index: 20;
 }
 
-.backButton{
+.backButton {
   position: fixed;
   bottom: 10px;
 
@@ -73,10 +74,15 @@ h1 {
   transform: translate(-50%, -50%);
 }
 
-.menuButton{
-  background-color: rgba(0,0,0,0);
+.menuButton {
+  background-color: rgba(0, 0, 0, 0);
   border: none;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+@media (min-width: 0px) and (max-width: 945px) {
+}

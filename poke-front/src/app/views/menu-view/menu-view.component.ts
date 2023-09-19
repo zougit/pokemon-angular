@@ -11,9 +11,9 @@ import { BattleService } from 'src/app/services/battle/battle.service';
 export class MenuViewComponent {
   constructor(private router: Router, private battleService: BattleService) {}
 
-  getRandom() {
+  getRandom(length : number) {
     let randomArray = []
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < length; i++) {
       const randomNumber = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
     randomArray.push(randomNumber);
     }
@@ -23,7 +23,7 @@ export class MenuViewComponent {
   goBattle() {
     let user: User = JSON.parse(localStorage.getItem('user')!);
     let ids = user.teams.flatMap((x) => x.pokemons.map((y) => y.id_poke));    
-    let randomTeam = this.getRandom();
+    let randomTeam = this.getRandom(ids.length);
     let teams = [ids,randomTeam];
     this.router
       .navigate(['arena'])

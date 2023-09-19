@@ -1,7 +1,7 @@
-<div class="d-flex flex-row align-items-center ">
-  <h1 class="m-5"><img src="./assets/pokemonBattleArenaTitle.png" alt="" width="500" height="50"></h1>
+<div class="app ">
+  <h1 class="m-5"><img src="./assets/poke-titre-portable 1.png" alt="" width="300" height="120"></h1>
 
-  <div>
+  <div *ngIf="!page">
     <button *ngIf="!isLogged" class="button" routerLink="auth/login">
       <p>login</p>
     </button>

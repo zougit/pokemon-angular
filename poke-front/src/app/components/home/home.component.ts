@@ -16,12 +16,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLogged = this.authService.isAuthenticated();
-    this.user = JSON.parse(localStorage.getItem('user')!);
+    if (localStorage.getItem('user')) {
+      this.user = JSON.parse(localStorage.getItem('user')!);
+    }
   }
 
   disconnect() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.setItem('token', '');
+    localStorage.setItem('user', '');
     this.router.navigate(['login']);
   }
 }

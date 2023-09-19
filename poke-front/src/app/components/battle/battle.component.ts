@@ -9,6 +9,10 @@ import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { BattleInfoProps, LogProps } from 'src/app/models/battleLog.model';
 import { Move } from 'src/app/models/move.model';
+import { Team } from 'src/app/models/team.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogPokeComponent } from '../dialog/dialog-poke/dialog-poke.component';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-battle',
@@ -23,15 +27,18 @@ export class battleComponent implements OnInit, OnDestroy {
   currentTime: number[] = [];
   cp: number[] = [0, 0];
   toggler = false;
+  cpt = 0;
+  page = ''
 
   constructor(
     private location: Location,
     private router: Router,
-    private battleService: BattleService
+    private battleService: BattleService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.battleService.page = this.location.path().slice(1);
+    this.battleService.page = this.page = this.location.path().slice(1);
 
     this.toggler = false;
     this.players = BattleService.player;
@@ -85,14 +92,43 @@ export class battleComponent implements OnInit, OnDestroy {
 
   atkMove(move: Move) {
     this.battleService.move = move;
-    this.battleService.toggler = !this.battleService.toggler;
-    this.toggler = this.battleService.toggler;
-
+    this.toggle();
+    if (this.cpt > 0) {
+      this.cpt--;
+    }
     console.log(move);
   }
 
-  lastPage(): void {
-    this.router.navigate(['pokeChoice']);
+  heal() {
+    if (this.cpt == 0) {
+      if (
+        this.pokemons[0][this.cp[0]].hp + 30 >
+        this.pokemons[0][this.cp[0]].hpMax
+      ) {
+        this.pokemons[0][this.cp[0]].hp = this.pokemons[0][this.cp[0]].hpMax;
+      } else {
+        this.pokemons[0][this.cp[0]].hp += 30;
+      }
+      this.cpt = 3;
+    }
+  }
+
+  change() {
+    const dialogRef = this.dialog.open(DialogPokeComponent, {
+      data: this.pokemons[0],
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // console.log('The dialog was closed', result);
+      if (result) {
+        console.log(
+          'change',
+          this.pokemons[0].findIndex((x) => x.id == result.id)
+        );
+
+        this.cp[0] = this.pokemons[0].findIndex((x) => x.id == result.id);
+      }
+    });
   }
 
   ngOnDestroy(): void {
