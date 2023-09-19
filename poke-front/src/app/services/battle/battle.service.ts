@@ -54,14 +54,19 @@ export class BattleService {
       map((pokeGroups: Pokemon[][]) => {
         pokeGroups.forEach((pokeGroup: Pokemon[], index) => {
           const updatedGroup: Pokemon[] = pokeGroup.map(
-            (pokemon: Pokemon) => {
-              console.log('pokemon ', pokemon);
+            (pokemon: Pokemon, i) => {
+              // console.log('pokemon ', pokemon);
 
               let poke = new Pokemon(pokemon);
-              poke.lvl = this.user ? this.user.pokemons[index].lvl : 99;
-              if (this.user && this.page == 'arena') {
-                poke.exp = this.user ? this.user.pokemons[index].exp : 0;
-                poke.expMax = this.user ? this.user.pokemons[index].expMax : 0;
+
+              if (this.user && index == 0 && this.page == 'arena') {
+                poke.lvl = this.user.teams[0].pokemons[i].lvl;
+                poke.exp = this.user.teams[0].pokemons[index].exp;
+                poke.expMax = this.user.teams[0].pokemons[index].expMax;
+              } else if (index == 1) {
+                poke.lvl = Math.floor(Math.random() * (this.moyenneLvl(0) - 1 + 1) + 1)
+              } else if (this.page == 'batlle') {
+                poke.lvl = 99;
               }
 
               let stats = {
@@ -75,28 +80,18 @@ export class BattleService {
               };
 
               // console.log("stat",stats);
-              
-//FIXME - stats foireuses
+
               for (const key in stats) {
                 if (Object.prototype.hasOwnProperty.call(poke, key)) {
-                  if (key == 'hp' || key == 'hpMax') {
+                  if (poke.lvl > 1) {
                     poke[key as keyof typeof stats] = Math.floor(
-                      stats[key as keyof typeof stats] * poke.lvl
+                      stats[key as keyof typeof stats] +
+                        ((poke.lvl - 2) / 98) * stats[key as keyof typeof stats]
                     );
-                  } else {
-                    poke[key as keyof typeof stats] = Math.floor(
-                      stats[key as keyof typeof stats] *
-                        (poke.lvl * (poke.lvl / 1000))
-                    );
-                    console.log("stat for",Math.floor(
-                      stats[key as keyof typeof stats] *
-                        (poke.lvl * (poke.lvl / 1000))
-                    ));
-                    
                   }
                 }
               }
-              console.log("poke stat",poke);
+              // console.log('poke stat', poke, '\n------------------------');
 
               return poke;
             }
@@ -213,7 +208,7 @@ export class BattleService {
         if (winnerTeam !== -1) {
           isover = true;
           if (this.user && winnerTeam == 0 && this.page == 'arena') {
-            this.user.money += 50 * (this.moyenneLvl() / 10);
+            this.user.money += 50 * (this.moyenneLvl(1) / 10);
             this.userService.updateUser(this.user); //TODO - tester ça
             this.user.teams[0].pokemons = this.user.teams[0].pokemons.map(
               (x, i) => {
@@ -234,12 +229,12 @@ export class BattleService {
     );
   }
 
-  moyenneLvl() {
+  moyenneLvl(player:number) {
     return (
-      this.pokemons[1].reduce(
+      this.pokemons[player].reduce(
         (accumulator, currentValue) => accumulator + currentValue.lvl,
         0
-      ) / this.pokemons[1].length
+      ) / this.pokemons[player].length
     );
   }
 

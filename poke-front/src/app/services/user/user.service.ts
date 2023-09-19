@@ -24,4 +24,8 @@ export class UserService {
   public getAllUser(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + 'user/getall');
   }
+
+  public deleteUser(user: User): Observable<any> {
+    return this.http.delete<any>(environment.apiUrl + 'user/delete/'+user.id);
+  }
 }

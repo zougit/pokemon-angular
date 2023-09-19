@@ -375,7 +375,7 @@ describe('BattleService', () => {
     // Set up the initial state of the battle
     battleService.pokemons = [[], [pokemon1, pokemon2]];
 
-    const avgLevel = battleService.moyenneLvl();
+    const avgLevel = battleService.moyenneLvl(1);
 
     // Expect the average level to be calculated correctly
     expect(avgLevel).toEqual(55); // (50 + 60) / 2 = 55

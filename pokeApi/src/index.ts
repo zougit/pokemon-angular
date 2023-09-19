@@ -33,7 +33,7 @@ connection.sync()
     console.log("Database successfully connected");
   })
   .catch((err) => {
-    console.log("Error", err);
+    console.log("Error", err); 
   });
 
 const port = process.env.PORT || 3000;

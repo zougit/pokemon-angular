@@ -4,14 +4,22 @@ import { PokeShop, Pokedb } from "../models";
 
 export async function createPokeShop(shop_id: number) {
   const pokeList = await getPokeShop(shop_id);
+  // console.log("poke :", pokeList?.length);
   if (pokeList != null) {
-    return await PokeShop.bulkCreate(pokeList as PokeShop[]);
+    
+    return await PokeShop.bulkCreate(pokeList as PokeShop[])
+      .then((data) => {
+        // console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   return null;
 }
 
 export async function emptyPokeShop() {
-  return await PokeShop.destroy({ where: { shop_id: 1 } });
+  return await PokeShop.destroy({ where: { shop_id: 2 } });
 }
 
 async function getPokeShop(shop_id: number) {
@@ -19,14 +27,19 @@ async function getPokeShop(shop_id: number) {
   let pokeList: any[] = [];
   let lvlList: any[] = [];
 
-  let min = await bestlvlPoke();
-  
-  while (pokeList.length <= 30) {
+  // let min = await bestlvlPoke();
+  let min = 5;
+
+  while (pokeList.length < 30) {
     random = Math.floor(Math.random() * 1000 + 1);
-    randomlvl = Math.floor(Math.random() * 11 )+ min;
+    randomlvl = Math.floor(Math.random() * 11) + min;
     const pokeRandom = await PokeAPI.PokemonSpecies.resolve(random);
     // console.log(pokeList.filter(function (e) {return e.id === pokeRandom.id;}).length == 0);
-    if (pokeList.filter(function (e) {return e.id === pokeRandom.id;}).length == 0) {
+    if (
+      pokeList.filter(function (e) {
+        return e.id === pokeRandom.id;
+      }).length == 0
+    ) {
       pokeList.push(pokeRandom);
     }
     lvlList.push(randomlvl);
@@ -47,15 +60,17 @@ async function getPokeShop(shop_id: number) {
           evo.name = "";
           evo.tier = 3;
         }
-        let lvlPrice = (Math.floor(lvlList[i]/10)) >= 1 ? lvlList[i]/(lvlList[i]/10) : 1;
+        let lvlPrice = Math.floor(lvlList[i] / 10) >= 1 ? lvlList[i] / (lvlList[i] / 10) : 1;
         let legendaryPrice = x.is_legendary || x.is_mythical ? 100 : 1;
         let info = {
           name: x.name,
           poke_id: x.id,
           price: 50 * evo.tier * legendaryPrice * lvlPrice,
           lvl: lvlList[i],
-          shop_id,
+          shop_id: shop_id,
         };
+        // console.log(info);
+
         return info;
       })
     );
@@ -64,14 +79,16 @@ async function getPokeShop(shop_id: number) {
 }
 
 async function bestlvlPoke() {
-  let moyenne=0,max=0,cpt=0;
-  const pokeUser = await Pokedb.findAll({where : {user_id : 1}})
+  let moyenne = 0,
+    max = 0,
+    cpt = 0;
+  const pokeUser = await Pokedb.findAll({ where: { user_id: 1 } });
   for (let i = 0; i < pokeUser.length; i++) {
     if (pokeUser[i].lvl > max) max = pokeUser[i].lvl;
   }
   // console.log("max : "+ max);
-  
-  max = (max - 30) > 0 ? max-30 : max
+
+  max = max - 30 > 0 ? max - 30 : max;
   for (let i = 0; i < pokeUser.length; i++) {
     // console.log("true or not : " + (pokeUser[i].lvl >= max));
     if (pokeUser[i].lvl >= max) {
@@ -82,8 +99,8 @@ async function bestlvlPoke() {
 
   moyenne = Math.floor(moyenne / cpt);
   // console.log("moyenne : "+ moyenne);
-  let min = (moyenne - 10) > 0 ? moyenne - 10 : 1;
-  return min
+  let min = moyenne - 10 > 0 ? moyenne - 10 : 1;
+  return min;
 }
 
 async function evolution(id: number, pokeSpecies: IPokemonSpecies) {

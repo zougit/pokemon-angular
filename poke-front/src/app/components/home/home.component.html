@@ -1,10 +1,13 @@
-<Button class="button" routerLink="definePlayer">
-    <p>2 players mode</p>
-</Button>
-<Button class="button" routerLink="menu">
-    <p>menu</p>
-</Button>
+<div class="d-flex flex-row">
+    <Button class="button btn btn-success " routerLink="definePlayer">
+        2 players mode
+    </Button>
+    <Button class="button btn btn-success" routerLink="menu">
+        menu
+    </Button>
 
-<Button *ngIf="user && user.role == 'admin'" class="button" routerLink="admin">
-    <p>Admin Management</p>
-</Button>
+    <Button *ngIf="user && user.role == 'admin'" class="button btn btn-success" routerLink="admin">
+        Admin Management
+    </Button>
+
+</div>

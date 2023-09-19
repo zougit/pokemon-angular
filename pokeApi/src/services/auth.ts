@@ -32,11 +32,14 @@ export async function register(user: User): Promise<void> {
     if (is_goodRole && !user_exist) {
       await User.create(user);
       const u = await User.findOne({ where: { username: user.username } });
-      if (u) {
-        // console.log(({name : "shop",user_id: u.id } as Shop));
+      if (u != null) {
         await Shop.create({ name: "shop", user_id: u.id } as Shop);
         const shop = await Shop.findOne({ where: { user_id: u.id } });
-        if (shop) await createPokeShop(shop.id);
+        if (shop) {
+          await createPokeShop(shop.id);
+        }
+        await Team.create({ name: "test", user_id: u.id } as Team);
+        await Pokedb.create({ name: "Bulbasaur", id_poke: 1, exp: 0, expMax: 50, lvl: 1, user_id: u.id, team_id:null } as Pokedb);
       }
     } else if (!is_goodRole) {
       throw new Error("roles are : user or admin");
